@@ -1,0 +1,9 @@
+.book {
+    width: 17rem;
+    max-width: 25rem;
+    /* margin: auto 1.5% auto 1.5%; */
+    margin: 3rem 1rem;
+    /* margin-right: 5%; */
+    text-align: center;
+    /* display: inline-flex; */
+}
