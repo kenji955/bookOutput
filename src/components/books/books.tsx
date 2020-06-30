@@ -3,6 +3,7 @@ import React from "react";
 import "./books.css";
 
 import Book from "./book/book";
+import TimeLine from "../timeLine/timeLine";
 
 let bookElements: {
     name: string;
@@ -13,8 +14,7 @@ let bookElements: {
         name: "ももたろう",
         author: "author",
         test: "test",
-    }
-    ,
+    },
     {
         name: "星の王子さま",
         author: "author",
@@ -34,16 +34,17 @@ let bookElements: {
 
 const books = (props: any) => {
     return (
-        <div className='books flex-wrap'>
-            {bookElements.map((book: any) => (
-                <Book book={book} />
-            ))}
+        <div className="marge">
+            <div className="books">
+                {bookElements.map((book: any) => (
+                    <Book book={book} />
+                ))}
+                {bookElements.map((book: any) => (
+                    <Book book={book} />
+                ))}
+            </div>
+            <TimeLine />
         </div>
-        // <React.Fragment>
-        //     <Book />
-        //     <Book />
-        //     <Book />
-        // </React.Fragment>
     );
 };
 
