@@ -11,7 +11,7 @@ const NavLinks = () => {
     <ul className="nav-links">
       <li>
         <NavLink to="/" exact>
-          ALL USERS
+          トップ画面(変更すべき)
         </NavLink>
       </li>
       {auth.isLoggedIn && (
@@ -26,12 +26,12 @@ const NavLinks = () => {
       )}
       {!auth.isLoggedIn && (
         <li>
-          <NavLink to="/auth">AUTHENTICATE</NavLink>
+          <NavLink to="/auth">ログイン/新規登録</NavLink>
         </li>
       )}
       {auth.isLoggedIn && (
         <li>
-          <button onClick={auth.logout}>LOGOUT</button>
+          <button onClick={auth.logout}>ログアウト</button>
         </li>
       )}
     </ul>

@@ -11,6 +11,7 @@ import NewTodo from "./components/NewTodo";
 import { Todo } from "./todo.model";
 
 import Auth from './user/pages/Auth';
+import Books from './components/books/books';
 
 import MainNavigation from "./shared/components/Navigation/MainNavigation";
 import { AuthContext } from './shared/context/auth-context';
@@ -47,27 +48,30 @@ const App: React.FC = () => {
     }, []);
 
     let routes;
-    //ログイン時
-    //   if (isLoggedIn) {
-    //     routes = (
-    //       <Switch>
-    //         <Route path="/" exact>
-    //           <Users />
-    //         </Route>
-    //         <Route path="/:userId/places" exact>
-    //           <UserPlaces />
-    //         </Route>
-    //         <Route path="/places/new" exact>
-    //           <NewPlace />
-    //         </Route>
-    //         <Route path="/places/:placeId">
-    //           <UpdatePlace />
-    //         </Route>
-    //         <Redirect to="/" />
-    //       </Switch>
-    //     );
-    //     //未ログイン時
-    //   } else {
+    // ログイン時
+      if (isLoggedIn) {
+        routes = (
+          <Switch>
+            {/* <Route path="/" exact>
+              <Users />
+            </Route>
+            <Route path="/:userId/places" exact>
+              <UserPlaces />
+            </Route>
+            <Route path="/places/new" exact>
+              <NewPlace />
+            </Route>
+            <Route path="/places/:placeId">
+              <UpdatePlace />
+            </Route> */}
+            <Route path="/books">
+              <Books />
+            </Route>
+            <Redirect to="/" />
+          </Switch>
+        );
+        //未ログイン時
+      } else {
         routes = (
           <Switch>
             {/* <Route path="/" exact>
@@ -76,14 +80,17 @@ const App: React.FC = () => {
             <Route path="/:userId/places" exact>
               <UserPlaces />
             </Route> */}
+            <Route path="/books">
+              <Books />
+            </Route>
             <Route path="/auth">
-              {/* <Auth /> */}
+              <Auth />
             </Route>
             <Redirect to="/auth" />
           </Switch>
         );
-    //   }
-    //  
+      }
+     
 
     return (
         // <React.Fragment>
@@ -106,7 +113,7 @@ const App: React.FC = () => {
                 {/* ナビゲーションバーを表示 */}
                 <MainNavigation />
                 <main>{routes}</main>
-                <Auth />
+                {/* <Auth /> */}
             </Router>
         </AuthContext.Provider>
     );

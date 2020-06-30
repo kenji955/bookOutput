@@ -67,7 +67,7 @@ const Auth: any = () => {
 
     return (
         <Card className="authentication">
-            <h2>Login Required</h2>
+            <h2>ログイン</h2>
             <hr />
             <form onSubmit={authSubmitHandler}>
                 {!isLoginMode && (
@@ -75,9 +75,9 @@ const Auth: any = () => {
                         element="input"
                         id="name"
                         type="text"
-                        label="Your Name"
+                        label="アカウント名"
                         validators={[VALIDATOR_REQUIRE()]}
-                        errorText="Please enter a name."
+                        errorText="アカウント名を入力してください。"
                         onInput={inputHandler}
                     />
                 )}
@@ -85,26 +85,26 @@ const Auth: any = () => {
                     element="input"
                     id="email"
                     type="email"
-                    label="E-Mail"
+                    label="メールアドレス"
                     validators={[VALIDATOR_EMAIL()]}
-                    errorText="Please enter a valid email address."
+                    errorText="有効なメールアドレスを入力してください。"
                     onInput={inputHandler}
                 />
                 <Input
                     element="input"
                     id="password"
                     type="password"
-                    label="Password"
+                    label="パスワード"
                     validators={[VALIDATOR_MINLENGTH(5)]}
-                    errorText="Please enter a valid password, at least 5 characters."
+                    errorText="有効なパスワードを5文字以上で入力してください。"
                     onInput={inputHandler}
                 />
                 <Button type="submit" disabled={!formState.isValid}>
-                    {isLoginMode ? 'LOGIN' : 'SIGNUP'}
+                    {isLoginMode ? 'ログイン' : '新規登録'}
                 </Button>
             </form>
             <Button inverse onClick={switchModeHandler}>
-                SWITCH TO {isLoginMode ? 'SIGNUP' : 'LOGIN'}
+                {isLoginMode ? '新規登録はこちら' : 'ログインはこちら'}
             </Button>
         </Card>
     );
