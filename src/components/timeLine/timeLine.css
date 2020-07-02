@@ -8,3 +8,18 @@
     overflow-x: hidden;
     margin: 0;
 }
+
+/*スクロールバーの横幅指定*/
+.timeLine.deco::-webkit-scrollbar {
+    width: 15px;
+  }
+  /*スクロールバーの背景色・角丸指定*/
+  .timeLine.deco::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background: #f2f2f2;
+  }
+  /*スクロールバーの色・角丸指定*/
+  .timeLine.deco::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background:#09C9D9;
+  }

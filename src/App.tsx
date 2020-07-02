@@ -12,6 +12,7 @@ import { Todo } from "./todo.model";
 
 import Auth from './user/pages/Auth';
 import Books from './components/books/books';
+import BookCheck from './components/books/bookCheck';
 
 import MainNavigation from "./shared/components/Navigation/MainNavigation";
 import { AuthContext } from './shared/context/auth-context';
@@ -64,6 +65,9 @@ const App: React.FC = () => {
             <Route path="/places/:placeId">
               <UpdatePlace />
             </Route> */}
+            <Route path="/books/:bookId">
+              <BookCheck />
+            </Route>
             <Route path="/books">
               <Books />
             </Route>
@@ -79,6 +83,9 @@ const App: React.FC = () => {
             </Route>
             <Route path="/:userId/places" exact>
               <UserPlaces />
+            </Route> */}
+            <Route path="/books/:bookId" component={BookCheck} />
+              {/* <BookCheck />
             </Route> */}
             <Route path="/books">
               <Books />

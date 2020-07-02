@@ -21,7 +21,7 @@ const NavLinks = () => {
       )}
       {auth.isLoggedIn && (
         <li>
-          <NavLink to="/places/new">ADD PLACE</NavLink>
+          <NavLink to="/books">本一覧</NavLink>
         </li>
       )}
       {!auth.isLoggedIn && (
