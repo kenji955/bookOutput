@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 import "./bookCheck.css";
 
-import Book from "./book/book";
 import TimeLine from "../timeLine/timeLine";
 import { useHttpClient } from "../../shared/hooks/http-hook";
 
@@ -68,7 +67,7 @@ function BookLocation() {
     // test = bookElements;
     // const bookElement = test.filter(place => place.creator === userId);
     const bookId = url.pathname.split("/")[2];
-    const bookElement = bookElements.filter((book) => book.id != bookId);
+    const bookElement = bookElements.filter((book) => book.id !== bookId);
     return { bookId, bookElement };
 }
 
@@ -103,13 +102,13 @@ function Fetchbook(
         headers?: any
     ) => Promise<any>,
     setLoadedBookinfo: any,
-    bookId:string
+    bookId: string
 ): any {
     useEffect(() => {
-        const fetchUsers = async () => {
+        const fetchBooks = async () => {
             try {
                 const responseData = await sendRequest(
-                    "http://localhost:5000/books/"+bookId
+                    "http://localhost:5000/books/" + bookId
                 );
 
                 // バックエンド→DBに接続し、受け取ったデータからユーザー情報を抽出、stateに保管している。
@@ -117,7 +116,7 @@ function Fetchbook(
                 setLoadedBookinfo(responseData.books);
             } catch (err) {}
         };
-        fetchUsers();
+        fetchBooks();
     }, [sendRequest]);
 }
 
@@ -127,9 +126,9 @@ const bookCheck = () => {
     const { isLoading, error, sendRequest, clearError } = HTTPClient();
     const [loadedBookinfo, setLoadedBookinfo] = LoadState();
 
-    Fetchbook(sendRequest, setLoadedBookinfo,bookId);
-    if(loadedBookinfo){
-        console.log('booksの確認：'+ loadedBookinfo);
+    Fetchbook(sendRequest, setLoadedBookinfo, bookId);
+    if (loadedBookinfo) {
+        console.log("booksの確認：" + loadedBookinfo);
     }
     // useEffect(() => {
     //     const fetchUsers = async () => {

@@ -6,10 +6,6 @@ import {
     Switch,
 } from "react-router-dom";
 
-import TodoList from "./components/TodoList";
-import NewTodo from "./components/NewTodo";
-import { Todo } from "./todo.model";
-
 import Auth from './user/pages/Auth';
 import Books from './components/books/books';
 import BookCheck from './components/books/bookCheck';
@@ -20,20 +16,7 @@ import { AuthContext } from './shared/context/auth-context';
 
 
 const App: React.FC = () => {
-    const [todos, setTodos] = useState<Todo[]>([]);
 
-    const todoAddHandler = (text: string) => {
-        setTodos((prevTodos) => [
-            ...prevTodos,
-            { id: Math.random().toString(), text: text },
-        ]);
-    };
-
-    const todoDeleteHandler = (todoId: string) => {
-        setTodos((prevTodos) => {
-            return prevTodos.filter((todo) => todo.id !== todoId);
-        });
-    };
 
     //Hooksの一つ。クラスコンポーネントではなく関数コンポーネントでstateを使うためのもの
     //useStateは[state、引数でstateを更新する関数] = useState(関数の初期値)で宣言される
