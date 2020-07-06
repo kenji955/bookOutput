@@ -9,11 +9,12 @@ export const getbook = async (req, res, next) => {
     console.log("bookIDのチェック：" + req.params.bookId);
 
     try {
-        books = await Book.findOne({ id: bookId }).lean().exec((error,result)=>{
-            console.log('books:'+result);
-            res.json({ books: result});
-        });
-
+        books = await Book.findOne({ id: bookId })
+            .lean()
+            .exec((error, result) => {
+                console.log("books:" + result);
+                res.json({ books: result });
+            });
     } catch (err) {
         const error = new HttpError(
             "本の取得に失敗しました。お手数ですが、後ほどもう一度お試しください。",
@@ -31,16 +32,20 @@ export const register = async (req, res, next) => {
     if (!errors.isEmpty()) {
         return next(
             new HttpError(
-                "無効な入力が行われました。入力内容を確認してください。",
+                "無効な入力が行われました。入力内容を確認してください。" +
+                errors[0]+errors[1],
                 422
             )
         );
     }
-    const { id, name, author } = req.body;
+    const { bookId, name, author } = req.body;
+    // const { userId, bookId, name, author } = req.body;
+    // ユーザー認証機能を追加したらuserIdを追加。
+    // モデルとずれているとエラーが発生する
 
     let existingBook;
     try {
-        existingBook = await Book.findOne({ id: id });
+        existingBook = await Book.findOne({ id: bookId });
     } catch (err) {
         const error = new HttpError(
             "本の登録に失敗しました。入力内容を確認してください。",
@@ -57,12 +62,17 @@ export const register = async (req, res, next) => {
         return next(error);
     }
 
+    // ユーザー認証機能を追加したらuserIdを追加。
+    // モデルとずれているとエラーが発生する
     const createdBook = new Book({
-        id,
+        // userId,
+        bookId,
         name,
         author,
     });
 
+    // ユーザー認証機能を追加したらuserIdを追加。
+    // モデルとずれているとエラーが発生する
     try {
         await createdBook.save();
     } catch (err) {
