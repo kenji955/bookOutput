@@ -53,7 +53,7 @@ const bookRegister = (props: any) => {
                 "http://localhost:5000/books/register",
                 "POST",
                 JSON.stringify({
-                    id: formState.inputs.id.value,
+                    bookId: formState.inputs.id.value,
                     name: formState.inputs.name.value,
                     author: formState.inputs.author.value,
                 }),

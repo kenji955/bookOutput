@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback } from "react";
 import {
     BrowserRouter as Router,
     Route,
@@ -6,18 +6,15 @@ import {
     Switch,
 } from "react-router-dom";
 
-import Auth from './user/pages/Auth';
-import Books from './components/books/books';
-import BookCheck from './components/books/bookCheck';
-import BookRegister from './components/books/book/bookRegister';
+import Auth from "./user/pages/Auth";
+import Books from "./components/books/books";
+import BookCheck from "./components/books/bookCheck";
+import BookRegister from "./components/books/book/bookRegister";
 
 import MainNavigation from "./shared/components/Navigation/MainNavigation";
-import { AuthContext } from './shared/context/auth-context';
-
+import { AuthContext } from "./shared/context/auth-context";
 
 const App: React.FC = () => {
-
-
     //Hooksの一つ。クラスコンポーネントではなく関数コンポーネントでstateを使うためのもの
     //useStateは[state、引数でstateを更新する関数] = useState(関数の初期値)で宣言される
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -34,10 +31,10 @@ const App: React.FC = () => {
 
     let routes;
     // ログイン時
-      if (isLoggedIn) {
+    if (isLoggedIn) {
         routes = (
-          <Switch>
-            {/* <Route path="/" exact>
+            <Switch>
+                {/* <Route path="/" exact>
               <Users />
             </Route>
             <Route path="/:userId/places" exact>
@@ -49,45 +46,44 @@ const App: React.FC = () => {
             <Route path="/places/:placeId">
               <UpdatePlace />
             </Route> */}
-            <Route path="/books/register">
-              <BookRegister />
-            </Route>
-            <Route path="/books/:bookId">
-              <BookCheck />
-            </Route>
-            <Route path="/books">
-              <Books />
-            </Route>
-            <Redirect to="/" />
-          </Switch>
+                <Route path="/books/register">
+                    <BookRegister />
+                </Route>
+                <Route path="/books/:bookId">
+                    <BookCheck />
+                </Route>
+                <Route path="/books">
+                    <Books />
+                </Route>
+                <Redirect to="/" />
+            </Switch>
         );
         //未ログイン時
-      } else {
+    } else {
         routes = (
-          <Switch>
-            {/* <Route path="/" exact>
+            <Switch>
+                {/* <Route path="/" exact>
               <Users />
             </Route>
             <Route path="/:userId/places" exact>
               <UserPlaces />
             </Route> */}
-            <Route path="/books/register">
-              <BookRegister />
-            </Route>
-            <Route path="/books/:bookId" component={BookCheck} />
-              {/* <BookCheck />
+                <Route path="/books/register">
+                    <BookRegister />
+                </Route>
+                <Route path="/books/:bookId" component={BookCheck} />
+                {/* <BookCheck />
             </Route> */}
-            <Route path="/books">
-              <Books />
-            </Route>
-            <Route path="/auth">
-              <Auth />
-            </Route>
-            <Redirect to="/auth" />
-          </Switch>
+                <Route path="/books">
+                    <Books />
+                </Route>
+                <Route path="/auth">
+                    <Auth />
+                </Route>
+                <Redirect to="/auth" />
+            </Switch>
         );
-      }
-     
+    }
 
     return (
         // <React.Fragment>
@@ -102,9 +98,22 @@ const App: React.FC = () => {
         //     </div>
         // </React.Fragment>
 
-
         <AuthContext.Provider
-            value={{ isLoggedIn: isLoggedIn, login: login, logout: logout }}
+            value={{
+              // 仮置き
+                isLoggedIn: false,
+                token: null,
+                userId: null,
+                login: login,
+                logout: logout,
+            }}
+            // value={{
+            //     isLoggedIn: !!token,
+            //     token: token,
+            //     userId: userId,
+            //     login: login,
+            //     logout: logout,
+            // }}
         >
             <Router>
                 {/* ナビゲーションバーを表示 */}

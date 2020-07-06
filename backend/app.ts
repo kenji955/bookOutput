@@ -4,6 +4,7 @@ import bodyParser = require('body-parser');
 import mongoose = require('mongoose');
 
 import bookRoutes from './routes/book-routes';
+import userRoutes from './routes/user-routes';
 import HttpError from './models/http-error';
 
 const app:express.Express = express();
@@ -21,6 +22,7 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use('/users', userRoutes);
 app.use('/books', bookRoutes);
 
 app.use((req, res, next) => {

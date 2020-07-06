@@ -47,14 +47,17 @@ function SearchBook(
 }
 
 // 本の情報表示項目作成処理。DBからのロード完了し、データが届いたら表示される。
-function bookInfoList(isLoading: boolean, loadedBookinfo: any) {
+function bookInfoList(isLoading: boolean, loadedBookinfo: any, book: any) {
     if (!isLoading && loadedBookinfo) {
         // console.log('bookInfoList:'+loadedBookinfo[0].id);
+        book(loadedBookinfo.title);
         return (
-            <div className="bookInfo">
-                <p>{loadedBookinfo.title}</p>
-                <p>{loadedBookinfo.authors}</p>
-            </div>
+            <Card>
+                <div className="bookInfo">
+                    <p>{loadedBookinfo.title}</p>
+                    <p>{loadedBookinfo.authors}</p>
+                </div>
+            </Card>
         );
     }
 }
@@ -83,7 +86,7 @@ const bookRegister = (props: any) => {
 
                 <Button type="submit">検索</Button>
             </form>
-            {bookInfoList(isLoading, loadedBookinfo)}
+            {bookInfoList(isLoading, loadedBookinfo, props.book)}
         </Card>
     );
 };
