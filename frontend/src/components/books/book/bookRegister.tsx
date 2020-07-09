@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import "./book.css";
 
@@ -8,10 +8,16 @@ import Button from "../../../shared/components/FormElements/Button";
 import { VALIDATOR_REQUIRE } from "../../../shared/util/validators";
 import { useForm } from "../../../shared/hooks/form-hook";
 import { useHttpClient } from "../../../shared/hooks/http-hook";
+import { AuthContext } from "../../../shared/context/auth-context";
 import BookSearch from "./bookSearch";
 
 function HTTPClient() {
     return useHttpClient();
+}
+
+function Context() {
+    console.log('useContext(AuthContext):'+useContext(AuthContext).userId);
+    return useContext(AuthContext);
 }
 
 // function LoadState(): any {
@@ -41,6 +47,8 @@ function BookForm() {
 
 const bookRegister = (props: any) => {
     const { isLoading, error, sendRequest, clearError } = HTTPClient();
+    const auth = Context();
+    console.log("userId:" + auth.isLoggedIn);
     // const [loadedBookinfo, setLoadedBookinfo] = LoadState();
 
     const [formState, inputHandler, setFormData] = BookForm();
@@ -63,6 +71,35 @@ const bookRegister = (props: any) => {
             );
         } catch (err) {}
     };
+
+    // これをsearchedBookに移動する
+    // const searchBookSubmitHandler = async (
+    //     id: any,
+    //     image: any,
+    //     name: any,
+    //     author: any,
+    //     publishedDate: any,
+    //     description: any
+    // ) => {
+    //     try {
+    //         const responseData = await sendRequest(
+    //             "http://localhost:5000/books/register",
+    //             "POST",
+    //             JSON.stringify({
+    //                 userId: auth.userId,
+    //                 bookId: id,
+    //                 name: name,
+    //                 author: author,
+    //                 image:image,
+    //                 publishedDate:publishedDate,
+    //                 description:description
+    //             }),
+    //             {
+    //                 "Content-Type": "application/json",
+    //             }
+    //         );
+    //     } catch (err) { }
+    // };
 
     return (
         <React.Fragment>
@@ -100,7 +137,7 @@ const bookRegister = (props: any) => {
                     </Button>
                 </form>
             </Card>
-            <BookSearch />
+            <BookSearch auth={auth} />
         </React.Fragment>
     );
 };

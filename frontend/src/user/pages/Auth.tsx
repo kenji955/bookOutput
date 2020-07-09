@@ -15,7 +15,9 @@ import "./Auth.css";
 
 type auth = {
     isLoggedIn: boolean;
-    login: () => void;
+    userId: any;
+    token: any;
+    login: (uid: any, token: any, expirationDate: any) => void;
     logout: () => void;
 };
 
@@ -26,7 +28,7 @@ const Auth: any = () => {
 
     const [formState, inputHandler, setFormData] = useForm(
         {
-            email: {
+            name: {
                 value: "",
                 isValid: false,
             },
@@ -43,16 +45,16 @@ const Auth: any = () => {
             setFormData(
                 {
                     ...formState.inputs,
-                    name: undefined,
+                    email: undefined,
                 },
-                formState.inputs.email.isValid &&
+                formState.inputs.name.isValid &&
                     formState.inputs.password.isValid
             );
         } else {
             setFormData(
                 {
                     ...formState.inputs,
-                    name: {
+                    email: {
                         value: "",
                         isValid: false,
                     },
@@ -71,39 +73,47 @@ const Auth: any = () => {
 
     const authSubmitHandler = async (event: any) => {
         event.preventDefault();
+        if (isLoginMode) {
+            try {
+                console.log(isLoginMode);
+                const responseData = await sendRequest(
+                    "http://localhost:5000/users/login",
+                    "POST",
+                    JSON.stringify({
+                        name: formState.inputs.name.value,
+                        password: formState.inputs.password.value,
+                    }),
+                    {
+                        "Content-Type": "application/json",
+                    }
+                );
+                console.log("responseData:" + responseData.name);
+                auth.login(responseData.name, responseData.token, null);
+            } catch (err) {
+                console.log(err);
+            }
+        } else {
+            try {
+                // const formData = new FormData();
+                // formData.append('email', formState.inputs.email.value);
+                // formData.append("name", formState.inputs.name.value);
+                // formData.append("password", formState.inputs.password.value);
+                const responseData = await sendRequest(
+                    "http://localhost:5000/users/signup",
+                    "POST",
+                    JSON.stringify({
+                        name: formState.inputs.name.value,
+                        password: formState.inputs.password.value,
+                        email: formState.inputs.email.value,
+                    }),
+                    {
+                        "Content-Type": "application/json",
+                    }
+                );
 
-        // if (isLoginMode) {
-        try {
-            const responseData = await sendRequest(
-                "http://localhost:5000/users/login",
-                // "http://localhost:5000/users/signup",
-                "POST",
-                JSON.stringify({
-                    name: formState.inputs.name.value,
-                    password: formState.inputs.password.value,
-                }),
-                {
-                    "Content-Type": "application/json",
-                }
-            );
-            console.log('responseData:'+responseData.name);
-            // auth.login(responseData.userId, responseData.token);
-        } catch (err) {}
-        // } else {
-        //     try {
-        //         const formData = new FormData();
-        //         formData.append('email', formState.inputs.email.value);
-        //         formData.append("name", formState.inputs.name.value);
-        //         formData.append("password", formState.inputs.password.value);
-        //         const responseData = await sendRequest(
-        //             "http://localhost:5000/users/signup",
-        //             "POST",
-        //             formData
-        //         );
-
-        //         // auth.login(responseData.userId, responseData.token);
-        //     } catch (err) {}
-        // }
+                auth.login(responseData.userId, responseData.token, null);
+            } catch (err) {}
+        }
     };
 
     return (
@@ -111,24 +121,24 @@ const Auth: any = () => {
             <h2>ログイン</h2>
             <hr />
             <form onSubmit={authSubmitHandler}>
-                {/* {!isLoginMode && ( */}
+                {!isLoginMode && (
                     <Input
                         element="input"
-                        id="name"
-                        type="text"
-                        label="アカウント名"
-                        validators={[VALIDATOR_REQUIRE()]}
-                        errorText="アカウント名を入力してください。"
+                        id="email"
+                        type="email"
+                        label="メールアドレス"
+                        validators={[VALIDATOR_EMAIL()]}
+                        errorText="有効なメールアドレスを入力してください。"
                         onInput={inputHandler}
                     />
-                {/* )} */}
+                )}
                 <Input
                     element="input"
-                    id="email"
-                    type="email"
-                    label="メールアドレス"
-                    validators={[VALIDATOR_EMAIL()]}
-                    errorText="有効なメールアドレスを入力してください。"
+                    id="name"
+                    type="text"
+                    label="アカウント名"
+                    validators={[VALIDATOR_REQUIRE()]}
+                    errorText="アカウント名を入力してください。"
                     onInput={inputHandler}
                 />
                 <Input

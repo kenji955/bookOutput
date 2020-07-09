@@ -19,6 +19,7 @@ router.post(
     "/signup",
     [
         check("name").not().isEmpty(),
+        check("email").not().isEmpty(),
         check("password").not().isEmpty()
     ],
     userController.signup

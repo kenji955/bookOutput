@@ -1,15 +1,18 @@
-import mongoose = require('mongoose');
-import uniqueValidator = require('mongoose-unique-validator');
+import mongoose = require("mongoose");
+import uniqueValidator = require("mongoose-unique-validator");
 
 const Schema = mongoose.Schema;
 
 const bookSchema = new Schema({
-  // userId: { type: String, required: true },
-  bookId: { type: String, required: true },
-  name: { type: String, required: true },
-  author: { type: String, required: true}
+    userId: { type: String },
+    bookId: { type: String },
+    name: { type: String },
+    author: { type: String },
+    image: { type: String },
+    publishedDate: { type: String },
+    description: { type: String },
 });
 
 bookSchema.plugin(uniqueValidator);
 
-export default mongoose.model('book', bookSchema);
+export default mongoose.model("book", bookSchema);

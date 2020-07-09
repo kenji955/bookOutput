@@ -33,19 +33,25 @@ export const register = async (req, res, next) => {
         return next(
             new HttpError(
                 "無効な入力が行われました。入力内容を確認してください。" +
-                errors[0]+errors[1],
+                errors[0] + errors[1],
                 422
             )
         );
     }
-    const { bookId, name, author } = req.body;
+    const { userId,
+        bookId,
+        name,
+        author,
+        image,
+        publishedDate,
+        description } = req.body;
     // const { userId, bookId, name, author } = req.body;
     // ユーザー認証機能を追加したらuserIdを追加。
     // モデルとずれているとエラーが発生する
 
     let existingBook;
     try {
-        existingBook = await Book.findOne({ id: bookId });
+        existingBook = await Book.findOne({ id: bookId, userId: userId });
     } catch (err) {
         const error = new HttpError(
             "本の登録に失敗しました。入力内容を確認してください。",
@@ -65,11 +71,15 @@ export const register = async (req, res, next) => {
     // ユーザー認証機能を追加したらuserIdを追加。
     // モデルとずれているとエラーが発生する
     const createdBook = new Book({
-        // userId,
+        userId,
         bookId,
         name,
         author,
+        image,
+        publishedDate,
+        description
     });
+    console.log(createdBook);
 
     // ユーザー認証機能を追加したらuserIdを追加。
     // モデルとずれているとエラーが発生する

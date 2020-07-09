@@ -125,6 +125,8 @@ const bookCheck = () => {
     const { bookId, bookElement } = BookLocation();
     const { isLoading, error, sendRequest, clearError } = HTTPClient();
     const [loadedBookinfo, setLoadedBookinfo] = LoadState();
+    // ここで↓の処理をすればuserIdも取得できる。userID+bookIdで一意のチェックリストを呼び出せる
+    // const auth = useContext(AuthContext);
 
     Fetchbook(sendRequest, setLoadedBookinfo, bookId);
     if (loadedBookinfo) {

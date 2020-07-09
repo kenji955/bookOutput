@@ -1,6 +1,6 @@
 import { useCallback, useReducer } from 'react';
 
-const formReducer = (state, action) => {
+const formReducer = (state:any, action:any) => {
   switch (action.type) {
     case 'INPUT_CHANGE':
       let formIsValid = true;
@@ -37,7 +37,7 @@ const formReducer = (state, action) => {
 // useReducerの一つ目の戻り値、ここではformStateには、dispatchによって更新されたStateの最新版が保管される
 // つまりformReducerはStateとそれを更新する関数(action)というuseStateと似たような構成であるが、更新する関数の処理内容を自分で決められるという特性を持つ
 // Reduxのreducer同様、タイプで処理を指定することで一つのstateに対して複数の処理を設定できる。
-export const useForm = (initialInputs, initialFormValidity) => {
+export const useForm = (initialInputs:any, initialFormValidity:any) => {
   const [formState, dispatch] = useReducer(formReducer, {
     inputs: initialInputs,
     isValid: initialFormValidity

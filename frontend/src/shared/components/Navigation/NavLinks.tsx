@@ -5,6 +5,7 @@ import { AuthContext } from '../../context/auth-context';
 import './NavLinks.css';
 
 const NavLinks = () => {
+  // ページ繊維時に更新される認証情報を取得する
   const auth = useContext(AuthContext);
 
   return (
@@ -16,7 +17,8 @@ const NavLinks = () => {
       </li>
       {auth.isLoggedIn && (
         <li>
-          <NavLink to="/u1/places">MY PLACES</NavLink>
+          {/* authからユーザー情報の取得は可能 */}
+          <NavLink to={`/${auth.userId}/places`}>MY PLACES</NavLink>
         </li>
       )}
       {auth.isLoggedIn && (

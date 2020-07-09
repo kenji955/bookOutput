@@ -9,7 +9,7 @@ const book = (props: any) => {
     return (
         <Card className="book">
             <Link to={{
-                pathname: `/books/${props.book.id}`,
+                pathname: `/books/${props.book.id}`
             }}>
                 <h2>{props.book.name}</h2>
                 <hr />
