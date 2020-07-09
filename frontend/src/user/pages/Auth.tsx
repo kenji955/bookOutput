@@ -87,8 +87,8 @@ const Auth: any = () => {
                         "Content-Type": "application/json",
                     }
                 );
-                console.log("responseData:" + responseData.name);
-                auth.login(responseData.name, responseData.token, null);
+                console.log("responseData:" + responseData.id);
+                auth.login(responseData.id, responseData.token, null);
             } catch (err) {
                 console.log(err);
             }

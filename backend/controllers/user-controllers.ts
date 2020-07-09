@@ -8,15 +8,9 @@ import User from "../models/user";
 export const signup = async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        const { name, email, password } = req.body;
         return next(
             new HttpError(
-                "無効な入力が通過しましたので、データを確認してください。" +
-                    name +
-                    "  " +
-                    email +
-                    "  " +
-                    password,
+                "無効な入力が通過しましたので、データを確認してください。",
                 422
             )
         );
@@ -28,7 +22,9 @@ export const signup = async (req, res, next) => {
     // 入力情報がすでに登録されているか検索する
     let existingUser;
     try {
-        existingUser = await User.findOne({ name: name });
+        existingUser = await User.find({
+            $or: [{ email: email }, { name: name }],
+        });
     } catch (err) {
         const error = new HttpError(
             "サインアップに失敗しました。もう一度お試しください。",
@@ -38,22 +34,19 @@ export const signup = async (req, res, next) => {
     }
 
     // 登録情報が重複していないかチェックする。
-    if (existingUser) {
+    if (existingUser[0]) {
         const error = new HttpError(
-            "入力されたIDはすでに利用されております。",
+            "入力されたアカウント名はすでに利用されております。",
             422
         );
         return next(error);
     }
 
-    //
-    // パスワードハッシュ化、失敗している。
-    //
-
     // パスワードをハッシュ化する。
     let hashedPassword;
     try {
         hashedPassword = await bcrypt.hash(password, 12);
+        console.log(hashedPassword);
     } catch (err) {
         const error = new HttpError(
             "ユーザーを作成できませんでした。後でもう一度お試しください。",
@@ -66,13 +59,15 @@ export const signup = async (req, res, next) => {
     const createdUser: any = new User({
         name,
         email,
-        hashedPassword,
+        password: hashedPassword,
     });
 
     // 作成したモデルデータをDBに保管する
     try {
+        console.log(createdUser);
         await createdUser.save();
     } catch (err) {
+        console.log(createdUser);
         const error = new HttpError(
             "サインアップに失敗しました。もう一度お試しください。",
             500
@@ -80,10 +75,10 @@ export const signup = async (req, res, next) => {
         return next(error);
     }
 
-    // token作成、失敗している。
     let token;
     try {
         token = jwt.sign(
+            // { userId: createdUser.id },
             { userId: createdUser.id, email: createdUser.email },
             "supersecret_dont_share",
             { expiresIn: "1h" }
@@ -96,8 +91,23 @@ export const signup = async (req, res, next) => {
         return next(error);
     }
 
-    res.status(201).json({ userId: createdUser.id,email: createdUser.email, token: token });
+    res.status(201).json({
+        userId: createdUser.id,
+        email: createdUser.email,
+        token: token
+    });
 };
+
+
+
+
+
+
+
+
+
+
+
 
 export const login = async (req, res, next) => {
     const { name, password } = req.body;
@@ -125,7 +135,7 @@ export const login = async (req, res, next) => {
 
     let isValidPassword = false;
     try {
-          isValidPassword = await bcrypt.compare(password, existingUser.password);
+        isValidPassword = await bcrypt.compare(password, existingUser.password);
         // isValidPassword = (await password) == existingUser.password;
         console.log(isValidPassword);
     } catch (err) {
@@ -147,7 +157,8 @@ export const login = async (req, res, next) => {
     let token;
     try {
         token = jwt.sign(
-            { userId: existingUser.name, email: existingUser.email },
+            // { userId: existingUser.id },
+            { userId: existingUser.id, email: existingUser.email },
             "supersecret_dont_share",
             { expiresIn: "1h" }
         );
@@ -158,10 +169,11 @@ export const login = async (req, res, next) => {
         );
         return next(error);
     }
-    console.log(token);
+    // console.log(token);
 
     res.json({
-        name: existingUser.name,
-        token: token,
+        id: existingUser.id,
+        email: existingUser.email,
+        token: token
     });
 };

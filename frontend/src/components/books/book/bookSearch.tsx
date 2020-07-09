@@ -50,7 +50,7 @@ function SearchBook(
         try {
             const responseData = await sendRequest(
                 // テストのため検索結果を1件にしている
-                `https://www.googleapis.com/books/v1/volumes?q=${formState.inputs.search.value}&maxResults=1`
+                `https://www.googleapis.com/books/v1/volumes?q=${formState.inputs.search.value}&maxResults=10`
             );
 
             // バックエンド→DBに接続し、受け取ったデータからユーザー情報を抽出、stateに保管している。

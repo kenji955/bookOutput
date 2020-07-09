@@ -7,8 +7,8 @@ export const useAuth = () => {
   //Hooksの一つ。クラスコンポーネントではなく関数コンポーネントでstateを使うためのもの
   //useStateは[state、引数でstateを更新する関数] = useState(関数の初期値)で宣言される
   const [token, setToken] = useState(false);
-  const [tokenExpirationDate, setTokenExpirationDate] = useState(new Date);
-  const [userId, setUserId] = useState();
+  const [tokenExpirationDate, setTokenExpirationDate] = useState();
+  const [userId, setUserId] = useState(null);
 
   // ログイン処理。
   //useCallbackは関数の処理結果をキャッシュに格納する。再計算の手間を省き処理を軽くすることができる。
@@ -17,8 +17,9 @@ export const useAuth = () => {
     // tokenとユーザーIDを設定
     setToken(token);
     setUserId(uid);
-    console.log('Login処理時のuid：'+uid);
-    console.log('Login処理時のuserId：'+userId);
+    // console.log('Login処理時のuid：'+uid);
+    // console.log('Login処理時のuserId：'+userId);
+    // console.log('Login処理時のexpirationDate：'+expirationDate);
     // 引数、1時間後のより未来である時間を取得。たぶん。
     const tokenExpirationDate =
       expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60);
@@ -37,6 +38,7 @@ export const useAuth = () => {
 
   // ログアウト処理
   const logout = useCallback(() => {
+    // console.log('===============logout===============');
     // tokenやログアウトまでの時間、ユーザーIDを空にする
     setToken(null!);
     setTokenExpirationDate(null!);
@@ -48,9 +50,11 @@ export const useAuth = () => {
   // token、タイムアウト予定時間が更新 もしくはログアウト処理が行われるごとに実行される。
   useEffect(() => {
     if (token && tokenExpirationDate) {
+      // console.log('tokenExpirationDate'+tokenExpirationDate);
       // ログイン中でタイムアウト予定時間も入力されている場合、
       // タイムアウトまでの時間数を取得し、時間がたったらログアウトを実行する
-      const remainingTime = (tokenExpirationDate).getTime() - new Date().getTime();
+      const remainingTime = tokenExpirationDate.getTime() - new Date().getTime();
+      // console.log('remainingTime:'+remainingTime);
       logoutTimer = setTimeout(logout, remainingTime);
     } else {
       // ログアウト処理後、タイムアウト予定時間を初期化する。
@@ -69,8 +73,8 @@ export const useAuth = () => {
       new Date(storedData.expiration) > new Date()
     ) {
       login(storedData.userId, storedData.token, new Date(storedData.expiration));
-      console.log('useEffectのtoken：'+storedData.token);
-      console.log('useEffectのuserId：'+storedData.userId);
+      // console.log('useEffectのtoken：'+storedData.token);
+      // console.log('useEffectのuserId：'+storedData.userId);
     }
   }, [login]);
 
