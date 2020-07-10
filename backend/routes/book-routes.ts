@@ -8,8 +8,20 @@ const router = express.Router();
 
 router.get("/user/:userId", bookController.getUserBooks);
 
-router.get("/:bookId", bookController.getbook);
+router.get("/check/:bookId/:userId", bookController.checkBook);
+// router.get("/info/:bookId/:userId", bookController.infoBook);
 
+router.post(
+    "/register/check",
+    [
+        // ユーザー認証機能を追加したらuserIdを追加。
+        // モデルとずれているとエラーが発生する
+        // ユーザー認証機能を作成したらONにする
+        // check("userId").not().isEmpty(),
+        check("bookId").not().isEmpty(),
+        check("userId").not().isEmpty()    ],
+    bookController.checkRegister
+);
 
 router.post(
     "/register",

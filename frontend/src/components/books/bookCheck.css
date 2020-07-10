@@ -48,3 +48,18 @@
     overflow-x: hidden;
     margin: 0;
 }
+
+.register_button{
+    position: absolute;
+    right: 30%;
+    bottom: 0;
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    background-color: aquamarine;
+    text-align: center;
+    vertical-align: middle;
+    margin: auto;
+    line-height: 5rem;
+
+}
