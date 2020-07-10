@@ -3,6 +3,32 @@ import { validationResult } from "express-validator";
 import HttpError from "../models/http-error";
 import Book from "../models/book";
 
+
+export const getUserBooks = async (req, res, next) => {
+    let books;
+    const userId = req.params.userId;
+    // const { userId } = req.body;
+    console.log("userIdのチェック：" + userId);
+
+    try {
+        books = await Book.find({ userId: userId })
+            .lean()
+            .exec((error, result) => {
+                console.log("books:" + result);
+                res.json({ books: result });
+            });
+    } catch (err) {
+        const error = new HttpError(
+            "本の取得に失敗しました。お手数ですが、後ほどもう一度お試しください。",
+            500
+        );
+        return next(error);
+    }
+    // res.json({ books: books.map((book) => book.toObject({ getters: true })) });
+    // console.log("books：" + books.id);
+    // res.json({ books: books});
+};
+
 export const getbook = async (req, res, next) => {
     let books;
     const bookId = req.params.bookId;

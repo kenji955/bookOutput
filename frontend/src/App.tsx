@@ -39,13 +39,13 @@ const App: React.FC = () => {
     } else {
         routes = (
             <Switch>
-                <Route path="/books/register">
+                {/* <Route path="/books/register">
                     <BookRegister />
-                </Route>
+                </Route> */}
                 {/* <Route path="/books/:bookId" component={BookCheck} /> */}
-                <Route path="/books">
+                {/* <Route path="/books">
                     <Books />
-                </Route>
+                </Route> */}
                 <Route path="/auth">
                     <Auth />
                 </Route>

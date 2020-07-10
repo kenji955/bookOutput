@@ -5,7 +5,11 @@ import * as bookController from "../controllers/book-controllers";
 
 const router = express.Router();
 
+
+router.get("/user/:userId", bookController.getUserBooks);
+
 router.get("/:bookId", bookController.getbook);
+
 
 router.post(
     "/register",

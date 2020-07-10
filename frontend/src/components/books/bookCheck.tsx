@@ -132,20 +132,7 @@ const bookCheck = () => {
     if (loadedBookinfo) {
         console.log("booksの確認：" + loadedBookinfo);
     }
-    // useEffect(() => {
-    //     const fetchUsers = async () => {
-    //         try {
-    //             const responseData = await sendRequest(
-    //                 "http://localhost:5000//books/:bookId"
-    //             );
 
-    //             // バックエンド→DBに接続し、受け取ったデータからユーザー情報を抽出、stateに保管している。
-    //             // ログイン有無にかかわらず、認証画面にユーザーリストを表示するため
-    //             setLoadedBookinfo(responseData.users);
-    //         } catch (err) {}
-    //     };
-    //     fetchUsers();
-    // }, [sendRequest]);
 
     return (
         // 全体表示
