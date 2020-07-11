@@ -7,6 +7,8 @@ import TimeLine from "../timeLine/timeLine";
 import { useHttpClient } from "../../shared/hooks/http-hook";
 import { AuthContext } from "../../shared/context/auth-context";
 import Card from "../../shared/components/UIElements/Card";
+import CheckList from "./checkList";
+import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 
 let bookElements: {
     id: string;
@@ -74,8 +76,8 @@ function BookLocation() {
 }
 
 // 本の情報表示項目作成処理。DBからのロード完了し、データが届いたら表示される。
-function bookInfoList(isLoading: boolean, loadedBookinfo: any) {
-    if (!isLoading && loadedBookinfo) {
+function bookInfoList(loadedBookinfo: any) {
+    if (loadedBookinfo) {
         // console.log('bookInfoList:'+loadedBookinfo[0].id);
         return (
             <Card className="book">
@@ -86,6 +88,12 @@ function bookInfoList(isLoading: boolean, loadedBookinfo: any) {
                 <p>{loadedBookinfo.publishedDate}</p>
                 <p>{loadedBookinfo.description}</p>
             </Card>
+        );
+    } else {
+        return (
+            <div className="center">
+                <LoadingSpinner />
+            </div>
         );
     }
 }
@@ -109,6 +117,11 @@ function LoadCheckState(): any {
     return [loadedCheckinfo, setLoadedCheckinfo];
 }
 
+function FlugState(): any {
+    const [Flug, setFlug] = useState(false);
+    return [Flug, setFlug];
+}
+
 function Fetchbook(
     sendRequest: (
         url: any,
@@ -119,7 +132,9 @@ function Fetchbook(
     setLoadedBookinfo: any,
     setLoadedCheckinfo: any,
     bookId: string,
-    auth: any
+    auth: any,
+    Flug: any,
+    setFlug: any
 ): any {
     useEffect(() => {
         const fetchBooks = async () => {
@@ -137,12 +152,31 @@ function Fetchbook(
                 // バックエンド→DBに接続し、受け取ったデータからユーザー情報を抽出、stateに保管している。
                 // ログイン有無にかかわらず、認証画面にユーザーリストを表示するため
                 setLoadedBookinfo(responseData.books);
+            } catch (err) {}
+        };
+        fetchBooks();
+    }, [sendRequest]);
+    useEffect(() => {
+        const fetchBooks = async () => {
+            try {
+                // const responseBookData = await sendRequest(
+                //     "http://localhost:5000/books/info/" + bookId +'/'+ auth.userId
+                // );
+                const responseData = await sendRequest(
+                    "http://localhost:5000/books/check/" +
+                        bookId +
+                        "/" +
+                        auth.userId
+                );
+
+                // バックエンド→DBに接続し、受け取ったデータからユーザー情報を抽出、stateに保管している。
+                // ログイン有無にかかわらず、認証画面にユーザーリストを表示するため
                 setLoadedCheckinfo(responseData.checkList);
                 console.log("responseData.checkList:" + responseData.checkList);
             } catch (err) {}
         };
         fetchBooks();
-    }, [sendRequest]);
+    }, [sendRequest, Flug]);
 }
 
 const bookCheck = (props: any) => {
@@ -151,11 +185,20 @@ const bookCheck = (props: any) => {
     const { isLoading, error, sendRequest, clearError } = HTTPClient();
     const [loadedBookinfo, setLoadedBookinfo] = LoadBookState();
     const [loadedCheckinfo, setLoadedCheckinfo] = LoadCheckState();
+    const [Flug, setFlug] = FlugState();
 
     // ここで↓の処理をすればuserIdも取得できる。userID+bookIdで一意のチェックリストを呼び出せる
     const auth = Context();
 
-    Fetchbook(sendRequest, setLoadedBookinfo, setLoadedCheckinfo, bookId, auth);
+    Fetchbook(
+        sendRequest,
+        setLoadedBookinfo,
+        setLoadedCheckinfo,
+        bookId,
+        auth,
+        Flug,
+        setFlug
+    );
 
     const CkeckList: any = [];
     console.log("isLoading" + isLoading);
@@ -207,6 +250,7 @@ const bookCheck = (props: any) => {
         } catch (err) {}
         // チェックリストを追加したら画面を更新したい。
         // Fetchbook(sendRequest, setLoadedBookinfo, setLoadedCheckinfo, bookId, auth);
+        setFlug(!Flug);
     };
 
     return (
@@ -219,7 +263,7 @@ const bookCheck = (props: any) => {
             </div> */}
 
             {/* テスト。DB、バックエンド、フロントエンド接続 */}
-            {bookInfoList(isLoading, loadedBookinfo)}
+            {bookInfoList(loadedBookinfo)}
 
             {/* 本に紐付くチェックリスト */}
             <div className="checkList">
@@ -230,7 +274,19 @@ const bookCheck = (props: any) => {
                         {item.test}
                     </div>
                 ))} */}
-                {CkeckList}
+                {/* {CkeckList} */}
+                {isLoading && (
+                    <div className="center">
+                        <LoadingSpinner />
+                    </div>
+                )}
+                {!isLoading && loadedCheckinfo && (
+                    <CheckList
+                        items={loadedCheckinfo}
+                        flug={isLoading}
+                        key={loadedCheckinfo.userId + loadedCheckinfo.bookId}
+                    />
+                )}
                 <div
                     onClick={checkListSubmitHandler}
                     className="register_button"

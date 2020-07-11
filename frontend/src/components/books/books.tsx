@@ -27,10 +27,6 @@ function LoadState(): any {
     return [loadedBookinfo, setLoadedBookinfo];
 }
 
-function RenderState(): any {
-    const [RenderBook, setRenderBook] = useState();
-    return [RenderBook, setRenderBook];
-}
 
 // ユーザーごとの登録された本をDBから取得してstateに格納する関数
 function Fetchbook(
@@ -94,7 +90,6 @@ const books = (props: any) => {
     // 本のIDと情報を取得
     const { isLoading, error, sendRequest, clearError } = HTTPClient();
     const [loadedBookinfo, setLoadedBookinfo] = LoadState();
-    const [RenderBook, setRenderBook] = RenderState();
 
     // ここで↓の処理をすればuserIdも取得できる。userID+bookIdで一意のチェックリストを呼び出せる
     // const auth = Context();
@@ -112,9 +107,6 @@ const books = (props: any) => {
                 {!isLoading && loadedBookinfo && (
                     <BookList books={loadedBookinfo} flug={isLoading} key={loadedBookinfo.bookId}/>
                 )}
-                {!isLoading &&
-                    loadedBookinfo && RenderBook
-                    }
             </div>
             <TimeLine />
             <Link to="/books/register" className="register_button">
