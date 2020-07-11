@@ -15,8 +15,8 @@ import { AuthContext } from "./shared/context/auth-context";
 import {useAuth} from './shared/hooks/auth-hook';
 
 const App: React.FC = () => {
-    console.log('App');
     const { token, login, logout, userId } = useAuth();
+    console.log('App:'+userId);
 
     let routes;
     // ログイン時

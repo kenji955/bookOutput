@@ -88,7 +88,7 @@ const Auth: any = () => {
                     }
                 );
                 console.log("responseData:" + responseData.id);
-                auth.login(responseData.id, responseData.token, null);
+                await auth.login(responseData.id, responseData.token, null);
             } catch (err) {
                 console.log(err);
             }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useMemo } from "react";
 import { Link } from "react-router-dom";
 
 import "./books.css";
@@ -8,6 +8,8 @@ import TimeLine from "../timeLine/timeLine";
 import { useHttpClient } from "../../shared/hooks/http-hook";
 import Card from "../../shared/components/UIElements/Card";
 import { AuthContext } from "../../shared/context/auth-context";
+import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
+import BookList from "./bookList";
 
 // DBとの接続用関数
 function HTTPClient() {
@@ -16,7 +18,6 @@ function HTTPClient() {
 
 // ログインしているアカウント情報を取得する関数
 function Context() {
-    console.log("useContext(AuthContext):" + useContext(AuthContext).userId);
     return useContext(AuthContext);
 }
 
@@ -24,6 +25,11 @@ function Context() {
 function LoadState(): any {
     const [loadedBookinfo, setLoadedBookinfo] = useState([]);
     return [loadedBookinfo, setLoadedBookinfo];
+}
+
+function RenderState(): any {
+    const [RenderBook, setRenderBook] = useState();
+    return [RenderBook, setRenderBook];
 }
 
 // ユーザーごとの登録された本をDBから取得してstateに格納する関数
@@ -35,62 +41,80 @@ function Fetchbook(
         headers?: any
     ) => Promise<any>,
     setLoadedBookinfo: any,
-    auth: any
+    loadedBookinfo: any
 ): any {
-    useEffect(() => {
-        console.log("Fetchbook実行チェック");
-        console.log("authチェック:" + auth.userId);
+    const auth2 = useContext(AuthContext);
+    useMemo(() => {
+        // console.log("Fetchbook実行チェック");
+        // console.log("authチェック:" + auth.userId);
         const fetchBooks = async () => {
             try {
+                console.log('auth222.userId:'+auth2.userId);
                 const responseData = await sendRequest(
-                    "http://localhost:5000/books/user/" + auth.userId
+                    "http://localhost:5000/books/user/" + auth2.userId
                 );
 
                 // バックエンド→DBに接続し、受け取ったデータからユーザー情報を抽出、stateに保管している。
                 // ログイン有無にかかわらず、認証画面にユーザーリストを表示するため
                 setLoadedBookinfo(responseData.books);
+                return responseData.books;
             } catch (err) {
                 console.log(err);
             }
         };
-        fetchBooks();
-    }, [sendRequest]);
+        const renderBook = async ()=>{
+            try {
+                 
+                const render = await fetchBooks();
+                setLoadedBookinfo(render);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        // fetchBooks();
+        renderBook();
+        console.log('loadedBookinfo:'+loadedBookinfo);
+        // RenderBooks(isLoading, loadedBookinfo,setRenderBook);
+        
+    }, [sendRequest,auth2]);
 }
+
+// function RenderBooks(isLoading: any, loadedBookinfo: any,setRenderBook:any) {
+//     useMemo(() => {
+//         // setRenderBook( <BookList books={loadedBookinfo} flug={isLoading} />);
+//         const renderBook:any =[];
+//         loadedBookinfo.map((book: any) => renderBook.push(<Book book={book} />));
+//         setRenderBook (renderBook);
+//         console.log('loadedBookinfo:'+loadedBookinfo);
+//         console.log('isLoading:'+isLoading);
+//     }, [isLoading, loadedBookinfo]);
+// }
 
 const books = (props: any) => {
     // 本のIDと情報を取得
     const { isLoading, error, sendRequest, clearError } = HTTPClient();
     const [loadedBookinfo, setLoadedBookinfo] = LoadState();
+    const [RenderBook, setRenderBook] = RenderState();
+
     // ここで↓の処理をすればuserIdも取得できる。userID+bookIdで一意のチェックリストを呼び出せる
-    const auth = Context();
+    // const auth = Context();
 
-    Fetchbook(sendRequest, setLoadedBookinfo, auth);
+    Fetchbook(sendRequest, setLoadedBookinfo, loadedBookinfo);
 
-    const bookList: any = [];
-
-    // DBから情報を取得したことを確認してから登録された本の一覧を作成する
-    if (!isLoading && loadedBookinfo) {
-        console.log("booksの確認：" + loadedBookinfo);
-        loadedBookinfo.forEach((book: any) => {
-            bookList.push(
-                // <Card className="book">
-                //     <img src={book.image} />
-                //     <h2>{book.name}</h2>
-                //     <hr />
-                //     <p>{book.author}</p>
-                //     <p>{book.publishedDate}</p>
-                //     <p>{book.description}</p>
-                // </Card>
-                <Book book={book} />
-            );
-        });
-    }
     return (
         <div className="marge">
             <div className="books">
-                {bookList}
-                {/* テスト。DB、バックエンド、フロントエンド接続 */}
-                {/* {bookInfoList(isLoading, loadedBookinfo)} */}
+                {isLoading && (
+                    <div className="center">
+                        <LoadingSpinner />
+                    </div>
+                )}
+                {!isLoading && loadedBookinfo && (
+                    <BookList books={loadedBookinfo} flug={isLoading} key={loadedBookinfo.bookId}/>
+                )}
+                {!isLoading &&
+                    loadedBookinfo && RenderBook
+                    }
             </div>
             <TimeLine />
             <Link to="/books/register" className="register_button">
