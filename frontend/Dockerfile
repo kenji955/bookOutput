@@ -1,5 +1,5 @@
 # ベースイメージの作成
-FROM node:12.14.1
+FROM node:12.16.1
 
 # コンテナ内で作業するディレクトリを指定
 WORKDIR /app
@@ -14,4 +14,4 @@ RUN npm cache clean --force && npm ci
 COPY . .
 
 # コンテナを起動する際に実行されるコマンド
-ENTRYPOINT [ "npm", "start" ]
+# ENTRYPOINT [ "npm", "start" ]

@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+    frontend:
+        # image: node:9.11
+        stdin_open: true
+        container_name: "frontend"
+        build: 
+          context: ./frontend
+        ports:
+            - 3000:3000
+        volumes:
+            - ./frontend:/usr/src/app
+        command: npm start
+
+    backend:
+        # image: node:9.11
+        container_name: "backend"
+        build: 
+          context: ./backend
+        ports:
+            - 5000:5000
+        volumes:
+            - ./backend:/app
+        command: npm start

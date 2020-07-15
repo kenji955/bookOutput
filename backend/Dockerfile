@@ -15,4 +15,4 @@ RUN npm install
 COPY . .
 
 # コンテナを起動する際に実行されるコマンド
-ENTRYPOINT [ "npm", "start" ]
+# ENTRYPOINT [ "npm", "start" ]
