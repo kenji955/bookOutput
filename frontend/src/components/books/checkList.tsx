@@ -1,8 +1,11 @@
 import React, { useCallback, useState, useMemo } from "react";
 
+<<<<<<< HEAD
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+=======
+>>>>>>> a42afd35ded0132b5f70499684a4af7f87e4aa10
 import Card from "../../shared/components/UIElements/Card";
 import Book from "./book/book";
 import "./checkList.css";
@@ -28,10 +31,16 @@ function CheckListState(): any {
 }
 
 const checkList = (props: any) => {
+<<<<<<< HEAD
+=======
+    // console.log('items:'+props.items);
+    // console.log('props.items.length:'+props.items.length);
+>>>>>>> a42afd35ded0132b5f70499684a4af7f87e4aa10
     const [CheckList, setCheckList] = CheckListState();
     RenderCheckList(props.flug, props.items, setCheckList);
 
     // const renderBook: any = [];
+<<<<<<< HEAD
     let i = 0;
     const renderBook =
         // props.items.map((item: any) => (
@@ -66,6 +75,15 @@ const checkList = (props: any) => {
                     </div>
                 )}
             </Draggable>
+=======
+
+    const renderBook =
+        // <div className="book-list">
+        props.items.map((item: any) => (
+            <div className={`checkListItem`}>
+                <p>{item.checkListId.value}</p>
+            </div>
+>>>>>>> a42afd35ded0132b5f70499684a4af7f87e4aa10
         ));
     // </div>
 
@@ -73,13 +91,18 @@ const checkList = (props: any) => {
         return (
             <div className="center">
                 <Card>
+<<<<<<< HEAD
                     <h2>アイテムは登録されておりません。</h2>
+=======
+                    <h2>No items found.</h2>
+>>>>>>> a42afd35ded0132b5f70499684a4af7f87e4aa10
                 </Card>
             </div>
         );
     }
 
     // return CheckList;
+<<<<<<< HEAD
     // return renderBook;
 
     // ここでエラーだろうなー
@@ -131,6 +154,9 @@ const checkList = (props: any) => {
             </Droppable>
         </DragDropContext>
     );
+=======
+    return renderBook;
+>>>>>>> a42afd35ded0132b5f70499684a4af7f87e4aa10
 };
 
 export default checkList;

@@ -2,6 +2,7 @@ version: "3"
 
 services:
     frontend:
+<<<<<<< HEAD
         # build:
         #     context: ./frontend
         # image: front1.0
@@ -10,10 +11,18 @@ services:
         # image: book-output-webapp/frontend:front1.0
         stdin_open: true
         container_name: "frontend"
+=======
+        # image: node:9.11
+        stdin_open: true
+        container_name: "frontend"
+        build: 
+          context: ./frontend
+>>>>>>> a42afd35ded0132b5f70499684a4af7f87e4aa10
         ports:
             - 3000:3000
         volumes:
             - ./frontend:/usr/src/app
+<<<<<<< HEAD
         depends_on:
             - "backend"
         # command: npm start
@@ -25,8 +34,21 @@ services:
         image: book-output-webapp/backend:latest
         # image: book-output-webapp/backend:back1.0
         container_name: "backend"
+=======
+        command: npm start
+
+    backend:
+        # image: node:9.11
+        container_name: "backend"
+        build: 
+          context: ./backend
+>>>>>>> a42afd35ded0132b5f70499684a4af7f87e4aa10
         ports:
             - 5000:5000
         volumes:
             - ./backend:/app
+<<<<<<< HEAD
         # command: npm start
+=======
+        command: npm start
+>>>>>>> a42afd35ded0132b5f70499684a4af7f87e4aa10

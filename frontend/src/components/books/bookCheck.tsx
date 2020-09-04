@@ -12,6 +12,7 @@ import { AuthContext } from "../../shared/context/auth-context";
 import Card from "../../shared/components/UIElements/Card";
 import CheckList from "./checkList";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
+<<<<<<< HEAD
 
 
 /*
@@ -19,6 +20,8 @@ import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 各ユーザーが本ごとに設定したチェックリストを確認できる。
 最終的には本を読んでやろうと思ったことのチェックリストと、それを宣言するタイムラインを作成する
 */
+=======
+>>>>>>> a42afd35ded0132b5f70499684a4af7f87e4aa10
 
 let bookElements: {
     id: string;
@@ -84,6 +87,10 @@ function BookLocation() {
 // 本の情報表示項目作成処理。DBからのロード完了し、データが届いたら表示される。
 function bookInfoList(loadedBookinfo: any) {
     if (loadedBookinfo) {
+<<<<<<< HEAD
+=======
+        // console.log('bookInfoList:'+loadedBookinfo[0].id);
+>>>>>>> a42afd35ded0132b5f70499684a4af7f87e4aa10
         return (
             <Card className="book">
                 <img src={loadedBookinfo.image} />
@@ -205,6 +212,7 @@ const bookCheck = (props: any) => {
         setFlug
     );
 
+<<<<<<< HEAD
     // const CheckList: any = [];
     // console.log("isLoading" + isLoading);
     // if (!isLoading && loadedCheckinfo) {
@@ -227,6 +235,30 @@ const bookCheck = (props: any) => {
     //     //             <p>{loadedCheckinfo.checkListId.value}</p>
     //     //         </div>)
     // }
+=======
+    const CkeckList: any = [];
+    console.log("isLoading" + isLoading);
+    if (!isLoading && loadedCheckinfo) {
+        loadedCheckinfo.forEach((ckeck: any) => {
+            CkeckList.push(
+                // <Card className="book">
+                //     <img src={book.image} />
+                //     <h2>{book.name}</h2>
+                //     <hr />
+                //     <p>{book.author}</p>
+                //     <p>{book.publishedDate}</p>
+                //     <p>{book.description}</p>
+                // </Card>
+                <div className={`checkListItem`}>
+                    <p>{ckeck.checkListId.value}</p>
+                </div>
+            );
+        });
+        // CkeckList.push (<div className={`checkListItem`}>
+        //             <p>{loadedCheckinfo.checkListId.value}</p>
+        //         </div>)
+    }
+>>>>>>> a42afd35ded0132b5f70499684a4af7f87e4aa10
 
     if (!isLoading && loadedBookinfo) {
         console.log("booksの確認：" + loadedBookinfo);
@@ -268,7 +300,10 @@ const bookCheck = (props: any) => {
             </div> */}
 
             {/* テスト。DB、バックエンド、フロントエンド接続 */}
+<<<<<<< HEAD
             {/* 本の詳細情報を表示する */}
+=======
+>>>>>>> a42afd35ded0132b5f70499684a4af7f87e4aa10
             {bookInfoList(loadedBookinfo)}
 
             {/* 本に紐付くチェックリスト */}
@@ -280,23 +315,35 @@ const bookCheck = (props: any) => {
                         {item.test}
                     </div>
                 ))} */}
+<<<<<<< HEAD
                 {/* {CheckList} */}
+=======
+                {/* {CkeckList} */}
+>>>>>>> a42afd35ded0132b5f70499684a4af7f87e4aa10
                 {isLoading && (
                     <div className="center">
                         <LoadingSpinner />
                     </div>
                 )}
                 {!isLoading && loadedCheckinfo && (
+<<<<<<< HEAD
 
                     // チェックリスト作成
+=======
+>>>>>>> a42afd35ded0132b5f70499684a4af7f87e4aa10
                     <CheckList
                         items={loadedCheckinfo}
                         flug={isLoading}
                         key={loadedCheckinfo.userId + loadedCheckinfo.bookId}
+<<<<<<< HEAD
                         // id={loadedCheckinfo.checkListId.id}
                     />
                 )}
                 {/* チェックリストへの項目追加処理呼び出しボタン */}
+=======
+                    />
+                )}
+>>>>>>> a42afd35ded0132b5f70499684a4af7f87e4aa10
                 <div
                     onClick={checkListSubmitHandler}
                     className="register_button"

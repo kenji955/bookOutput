@@ -12,6 +12,7 @@ COPY package*.json ./
 RUN npm install
 
 # ファイルを作業用ディレクトリにコピー。COPY <ソース>... <送信先>
+<<<<<<< HEAD
 COPY . /app
 
 EXPOSE 5000
@@ -22,3 +23,9 @@ ENTRYPOINT [ "npm","run", "start" ]
 
 # ! /bin/sh
 # ENTRYPOINT if [ "${LOCALDOMAIN}x" != "x" ]; then echo "search ${LOCALDOMAIN}" >> /etc/resolv.conf; fi exec "$@"
+=======
+COPY . .
+
+# コンテナを起動する際に実行されるコマンド
+# ENTRYPOINT [ "npm", "start" ]
+>>>>>>> a42afd35ded0132b5f70499684a4af7f87e4aa10
