@@ -77,6 +77,7 @@ const Auth: any = () => {
             try {
                 console.log(isLoginMode);
                 const responseData = await sendRequest(
+                    // "http://book-output-elb01-75870976.ap-northeast-1.elb.amazonaws.com:5000/users/login",
                     "http://localhost:5000/users/login",
                     "POST",
                     JSON.stringify({

@@ -2,9 +2,34 @@ import React, { useState, useEffect, useContext } from "react";
 
 import "./book.css";
 
+import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
+
+import {
+    Badge,
+    CircularProgress,
+    Paper,
+    Button,
+    Fab,
+    Grid,
+} from "@material-ui/core";
+
+// Material-UIアイコン取得
+import MailIcon from "@material-ui/icons/Mail";
+import ShareIcon from "@material-ui/icons/Share";
+import ListAlt from "@material-ui/icons/ListAlt";
+import PersonAdd from "@material-ui/icons/PersonAdd";
+import Lock from "@material-ui/icons/Lock";
+import Chat from "@material-ui/icons/Chat";
+import Assessment from "@material-ui/icons/Assessment";
+import CloudUpload from "@material-ui/icons/CloudUpload";
+import AssignmentTurnedIn from "@material-ui/icons/AssignmentTurnedIn";
+import AddIcon from "@material-ui/icons/Add";
+import EditIcon from "@material-ui/icons/Edit";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+
 import Card from "../../../shared/components/UIElements/Card";
 import Input from "../../../shared/components/FormElements/Input";
-import Button from "../../../shared/components/FormElements/Button";
+import ButtonE from "../../../shared/components/FormElements/Button";
 import { VALIDATOR_REQUIRE } from "../../../shared/util/validators";
 import { useForm } from "../../../shared/hooks/form-hook";
 import { useHttpClient } from "../../../shared/hooks/http-hook";
@@ -16,7 +41,7 @@ function HTTPClient() {
 }
 
 function Context() {
-    console.log('useContext(AuthContext):'+useContext(AuthContext).userId);
+    console.log("useContext(AuthContext):" + useContext(AuthContext).userId);
     return useContext(AuthContext);
 }
 
@@ -45,11 +70,34 @@ function BookForm() {
     );
 }
 
+// スタイルを適用する
+function Styles() {
+    const styles = makeStyles((theme: Theme) =>
+        createStyles({
+            root: {
+                flexGrow: 1,
+                padding: "10px",
+            },
+            paper: {
+                padding: theme.spacing(2),
+                textAlign: "center",
+                "& > *": {
+                    margin: theme.spacing(3),
+                },
+            },
+        })
+    );
+
+    return styles;
+}
+
 const bookRegister = (props: any) => {
     const { isLoading, error, sendRequest, clearError } = HTTPClient();
     const auth = Context();
     console.log("userId:" + auth.isLoggedIn);
     // const [loadedBookinfo, setLoadedBookinfo] = LoadState();
+
+    const classes:any = Styles();
 
     const [formState, inputHandler, setFormData] = BookForm();
 
@@ -132,12 +180,32 @@ const bookRegister = (props: any) => {
                         errorText="作者名を入力してください。"
                         onInput={inputHandler}
                     />
-                    <Button type="submit" disabled={!formState.isValid}>
+                    <ButtonE type="submit" disabled={!formState.isValid}>
                         登録
-                    </Button>
+                    </ButtonE>
                 </form>
             </Card>
             <BookSearch auth={auth} />
+
+            <Grid container className={classes.root} spacing={3}>
+                <Grid item xs={12} justify="center">
+                    <Paper
+                        variant="outlined"
+                        elevation={3}
+                        className={classes.paper}
+                    >
+                        <Fab color="primary" aria-label="add">
+                            <AddIcon />
+                        </Fab>
+                        <Fab color="secondary" aria-label="edit">
+                            <EditIcon />
+                        </Fab>
+                        <Fab disabled aria-label="like">
+                            <FavoriteIcon />
+                        </Fab>
+                    </Paper>
+                </Grid>
+            </Grid>
         </React.Fragment>
     );
 };

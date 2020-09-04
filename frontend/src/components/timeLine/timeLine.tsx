@@ -9,19 +9,19 @@ let itemElements: {
     test: string;
 }[] = [
     {
-        name: "ももたろう",
+        name: "test1",
         test: "test",
     },
     {
-        name: "星の王子さま",
+        name: "test2",
         test: "test",
     },
     {
-        name: "めっちゃええ感じの本",
+        name: "test3",
         test: "test",
     },
     {
-        name: "おもちもちもち",
+        name: "test4",
         test: "test",
     },
 ];

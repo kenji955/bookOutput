@@ -3,13 +3,19 @@ import { Link } from "react-router-dom";
 
 import "./books.css";
 
-import Book from "./book/book";
 import TimeLine from "../timeLine/timeLine";
 import { useHttpClient } from "../../shared/hooks/http-hook";
-import Card from "../../shared/components/UIElements/Card";
 import { AuthContext } from "../../shared/context/auth-context";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import BookList from "./bookList";
+
+/*
+ログインしたユーザーの登録済みの本を一覧表示する画面
+ログイン情報をもとにDBへアクセスし情報を取得後、画面を更新して本の一覧を表示する
+各本をクリックするとその本の詳細画面へ遷移する
+登録ボタンを押すと本追加画面へ遷移する
+*/
+
 
 // DBとの接続用関数
 function HTTPClient() {
@@ -27,10 +33,6 @@ function LoadState(): any {
     return [loadedBookinfo, setLoadedBookinfo];
 }
 
-function RenderState(): any {
-    const [RenderBook, setRenderBook] = useState();
-    return [RenderBook, setRenderBook];
-}
 
 // ユーザーごとの登録された本をDBから取得してstateに格納する関数
 function Fetchbook(
@@ -79,22 +81,11 @@ function Fetchbook(
     }, [sendRequest,auth2]);
 }
 
-// function RenderBooks(isLoading: any, loadedBookinfo: any,setRenderBook:any) {
-//     useMemo(() => {
-//         // setRenderBook( <BookList books={loadedBookinfo} flug={isLoading} />);
-//         const renderBook:any =[];
-//         loadedBookinfo.map((book: any) => renderBook.push(<Book book={book} />));
-//         setRenderBook (renderBook);
-//         console.log('loadedBookinfo:'+loadedBookinfo);
-//         console.log('isLoading:'+isLoading);
-//     }, [isLoading, loadedBookinfo]);
-// }
 
 const books = (props: any) => {
     // 本のIDと情報を取得
     const { isLoading, error, sendRequest, clearError } = HTTPClient();
     const [loadedBookinfo, setLoadedBookinfo] = LoadState();
-    const [RenderBook, setRenderBook] = RenderState();
 
     // ここで↓の処理をすればuserIdも取得できる。userID+bookIdで一意のチェックリストを呼び出せる
     // const auth = Context();
@@ -112,9 +103,6 @@ const books = (props: any) => {
                 {!isLoading && loadedBookinfo && (
                     <BookList books={loadedBookinfo} flug={isLoading} key={loadedBookinfo.bookId}/>
                 )}
-                {!isLoading &&
-                    loadedBookinfo && RenderBook
-                    }
             </div>
             <TimeLine />
             <Link to="/books/register" className="register_button">

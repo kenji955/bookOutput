@@ -1,0 +1,4 @@
+project/node_modules/
+project/public/
+project/.cache/
+project/dist/

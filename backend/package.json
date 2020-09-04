@@ -23,6 +23,7 @@
     "mongoose": "^5.9.21",
     "mongoose-unique-validator": "^2.0.3",
     "nodemon": "^2.0.4",
+    "ts-node": "^8.10.2",
     "typescript": "^3.7.5"
   },
   "scripts": {

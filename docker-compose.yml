@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+    frontend:
+        # build:
+        #     context: ./frontend
+        # image: front1.0
+        image: book-output-webapp/frontend:latest
+        # image: gorosuke8/frontend:front1.0
+        # image: book-output-webapp/frontend:front1.0
+        stdin_open: true
+        container_name: "frontend"
+        ports:
+            - 3000:3000
+        volumes:
+            - ./frontend:/usr/src/app
+        depends_on:
+            - "backend"
+        # command: npm start
+
+    backend:
+        # build:
+        #     context: ./backend
+        # image: back1.0
+        image: book-output-webapp/backend:latest
+        # image: book-output-webapp/backend:back1.0
+        container_name: "backend"
+        ports:
+            - 5000:5000
+        volumes:
+            - ./backend:/app
+        # command: npm start

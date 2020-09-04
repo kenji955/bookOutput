@@ -18,7 +18,7 @@ const NavLinks = () => {
       {auth.isLoggedIn && (
         <li>
           {/* authからユーザー情報の取得は可能 */}
-          <NavLink to={`/${auth.userId}/places`}>MY PLACES</NavLink>
+          <NavLink to={`/${auth.userId}/places`}>MY PAGE</NavLink>
         </li>
       )}
       {auth.isLoggedIn && (

@@ -3,10 +3,22 @@ import { useLocation } from "react-router-dom";
 
 import "./bookCheck.css";
 
+
+// import { DragDropContext, Droppable } from "react-beautiful-dnd";
+
 import TimeLine from "../timeLine/timeLine";
 import { useHttpClient } from "../../shared/hooks/http-hook";
 import { AuthContext } from "../../shared/context/auth-context";
 import Card from "../../shared/components/UIElements/Card";
+import CheckList from "./checkList";
+import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
+
+
+/*
+本の個別詳細画面
+各ユーザーが本ごとに設定したチェックリストを確認できる。
+最終的には本を読んでやろうと思ったことのチェックリストと、それを宣言するタイムラインを作成する
+*/
 
 let bookElements: {
     id: string;
@@ -65,18 +77,13 @@ let itemElements: {
 // URLから本のIDを取得
 function BookLocation() {
     const url = useLocation();
-    // const test = [];
-    // test = bookElements;
-    // const bookElement = test.filter(place => place.creator === userId);
     const bookId = url.pathname.split("/")[2];
-    // const bookElement = bookElements.filter((book) => book.id !== bookId);
     return { bookId };
 }
 
 // 本の情報表示項目作成処理。DBからのロード完了し、データが届いたら表示される。
-function bookInfoList(isLoading: boolean, loadedBookinfo: any) {
-    if (!isLoading && loadedBookinfo) {
-        // console.log('bookInfoList:'+loadedBookinfo[0].id);
+function bookInfoList(loadedBookinfo: any) {
+    if (loadedBookinfo) {
         return (
             <Card className="book">
                 <img src={loadedBookinfo.image} />
@@ -86,6 +93,12 @@ function bookInfoList(isLoading: boolean, loadedBookinfo: any) {
                 <p>{loadedBookinfo.publishedDate}</p>
                 <p>{loadedBookinfo.description}</p>
             </Card>
+        );
+    } else {
+        return (
+            <div className="center">
+                <LoadingSpinner />
+            </div>
         );
     }
 }
@@ -109,6 +122,11 @@ function LoadCheckState(): any {
     return [loadedCheckinfo, setLoadedCheckinfo];
 }
 
+function FlugState(): any {
+    const [Flug, setFlug] = useState(false);
+    return [Flug, setFlug];
+}
+
 function Fetchbook(
     sendRequest: (
         url: any,
@@ -119,7 +137,9 @@ function Fetchbook(
     setLoadedBookinfo: any,
     setLoadedCheckinfo: any,
     bookId: string,
-    auth: any
+    auth: any,
+    Flug: any,
+    setFlug: any
 ): any {
     useEffect(() => {
         const fetchBooks = async () => {
@@ -137,12 +157,31 @@ function Fetchbook(
                 // バックエンド→DBに接続し、受け取ったデータからユーザー情報を抽出、stateに保管している。
                 // ログイン有無にかかわらず、認証画面にユーザーリストを表示するため
                 setLoadedBookinfo(responseData.books);
+            } catch (err) {}
+        };
+        fetchBooks();
+    }, [sendRequest]);
+    useEffect(() => {
+        const fetchBooks = async () => {
+            try {
+                // const responseBookData = await sendRequest(
+                //     "http://localhost:5000/books/info/" + bookId +'/'+ auth.userId
+                // );
+                const responseData = await sendRequest(
+                    "http://localhost:5000/books/check/" +
+                        bookId +
+                        "/" +
+                        auth.userId
+                );
+
+                // バックエンド→DBに接続し、受け取ったデータからユーザー情報を抽出、stateに保管している。
+                // ログイン有無にかかわらず、認証画面にユーザーリストを表示するため
                 setLoadedCheckinfo(responseData.checkList);
                 console.log("responseData.checkList:" + responseData.checkList);
             } catch (err) {}
         };
         fetchBooks();
-    }, [sendRequest]);
+    }, [sendRequest, Flug]);
 }
 
 const bookCheck = (props: any) => {
@@ -151,34 +190,43 @@ const bookCheck = (props: any) => {
     const { isLoading, error, sendRequest, clearError } = HTTPClient();
     const [loadedBookinfo, setLoadedBookinfo] = LoadBookState();
     const [loadedCheckinfo, setLoadedCheckinfo] = LoadCheckState();
+    const [Flug, setFlug] = FlugState();
 
     // ここで↓の処理をすればuserIdも取得できる。userID+bookIdで一意のチェックリストを呼び出せる
     const auth = Context();
 
-    Fetchbook(sendRequest, setLoadedBookinfo, setLoadedCheckinfo, bookId, auth);
+    Fetchbook(
+        sendRequest,
+        setLoadedBookinfo,
+        setLoadedCheckinfo,
+        bookId,
+        auth,
+        Flug,
+        setFlug
+    );
 
-    const CkeckList: any = [];
-    console.log("isLoading" + isLoading);
-    if (!isLoading && loadedCheckinfo) {
-        loadedCheckinfo.forEach((ckeck: any) => {
-            CkeckList.push(
-                // <Card className="book">
-                //     <img src={book.image} />
-                //     <h2>{book.name}</h2>
-                //     <hr />
-                //     <p>{book.author}</p>
-                //     <p>{book.publishedDate}</p>
-                //     <p>{book.description}</p>
-                // </Card>
-                <div className={`checkListItem`}>
-                    <p>{ckeck.checkListId.value}</p>
-                </div>
-            );
-        });
-        // CkeckList.push (<div className={`checkListItem`}>
-        //             <p>{loadedCheckinfo.checkListId.value}</p>
-        //         </div>)
-    }
+    // const CheckList: any = [];
+    // console.log("isLoading" + isLoading);
+    // if (!isLoading && loadedCheckinfo) {
+    //     loadedCheckinfo.forEach((check: any) => {
+    //         CheckList.push(
+    //             // <Card className="book">
+    //             //     <img src={book.image} />
+    //             //     <h2>{book.name}</h2>
+    //             //     <hr />
+    //             //     <p>{book.author}</p>
+    //             //     <p>{book.publishedDate}</p>
+    //             //     <p>{book.description}</p>
+    //             // </Card>
+    //             <div className={`checkListItem`}>
+    //                 <p>{check.checkListId.value}</p>
+    //             </div>
+    //         );
+    //     });
+    //     // CheckList.push (<div className={`checkListItem`}>
+    //     //             <p>{loadedCheckinfo.checkListId.value}</p>
+    //     //         </div>)
+    // }
 
     if (!isLoading && loadedBookinfo) {
         console.log("booksの確認：" + loadedBookinfo);
@@ -196,7 +244,7 @@ const bookCheck = (props: any) => {
                     bookId: bookId,
                     checkListId: {
                         id: "1",
-                        value: "もちもちもちもちもちもち",
+                        value: "test content",
                         checkFrag: false,
                     },
                 }),
@@ -207,6 +255,7 @@ const bookCheck = (props: any) => {
         } catch (err) {}
         // チェックリストを追加したら画面を更新したい。
         // Fetchbook(sendRequest, setLoadedBookinfo, setLoadedCheckinfo, bookId, auth);
+        setFlug(!Flug);
     };
 
     return (
@@ -219,7 +268,8 @@ const bookCheck = (props: any) => {
             </div> */}
 
             {/* テスト。DB、バックエンド、フロントエンド接続 */}
-            {bookInfoList(isLoading, loadedBookinfo)}
+            {/* 本の詳細情報を表示する */}
+            {bookInfoList(loadedBookinfo)}
 
             {/* 本に紐付くチェックリスト */}
             <div className="checkList">
@@ -230,7 +280,23 @@ const bookCheck = (props: any) => {
                         {item.test}
                     </div>
                 ))} */}
-                {CkeckList}
+                {/* {CheckList} */}
+                {isLoading && (
+                    <div className="center">
+                        <LoadingSpinner />
+                    </div>
+                )}
+                {!isLoading && loadedCheckinfo && (
+
+                    // チェックリスト作成
+                    <CheckList
+                        items={loadedCheckinfo}
+                        flug={isLoading}
+                        key={loadedCheckinfo.userId + loadedCheckinfo.bookId}
+                        // id={loadedCheckinfo.checkListId.id}
+                    />
+                )}
+                {/* チェックリストへの項目追加処理呼び出しボタン */}
                 <div
                     onClick={checkListSubmitHandler}
                     className="register_button"

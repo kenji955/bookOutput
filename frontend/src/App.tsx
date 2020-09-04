@@ -6,17 +6,53 @@ import {
     Switch,
 } from "react-router-dom";
 
+import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import green from "@material-ui/core/colors/green";
+import red from "@material-ui/core/colors/red";
+
 import Auth from "./user/pages/Auth";
 import Books from "./components/books/books";
 import BookCheck from "./components/books/bookCheck";
 import BookRegister from "./components/books/book/bookRegister";
 import MainNavigation from "./shared/components/Navigation/MainNavigation";
 import { AuthContext } from "./shared/context/auth-context";
-import {useAuth} from './shared/hooks/auth-hook';
+import { useAuth } from "./shared/hooks/auth-hook";
+
+// 独自のテーマを作成する
+const theme = createMuiTheme({
+    palette: {
+        //type: 'dark', // ダークテーマ
+        primary: green,
+        // primary: red,
+    },
+    typography: {
+        fontFamily: ["Noto Sans", "sans-serif"].join(","),
+        fontSize: 12,
+        h1: {
+            fontSize: "1.75rem",
+        },
+        h2: {
+            fontSize: "1.5rem",
+        },
+        h3: {
+            fontSize: "1.25rem",
+        },
+        h4: {
+            fontSize: "1.125rem",
+        },
+        h5: {
+            fontSize: "1rem",
+        },
+        h6: {
+            fontSize: "1rem",
+        },
+    },
+});
 
 const App: React.FC = () => {
     const { token, login, logout, userId } = useAuth();
-    console.log('App:'+userId);
+    console.log("App:" + userId);
 
     let routes;
     // ログイン時
@@ -67,23 +103,25 @@ const App: React.FC = () => {
         //     </div>
         // </React.Fragment>
 
-        <AuthContext.Provider
-            value={{
-              // 仮置き
-              isLoggedIn: !!token,
-              token: token,
-              userId: userId,
-              login: login,
-              logout: logout
-            }}
-        >
-            <Router>
-                {/* ナビゲーションバーを表示 */}
-                <MainNavigation />
-                <main>{routes}</main>
-                {/* <Auth /> */}
-            </Router>
-        </AuthContext.Provider>
+        <MuiThemeProvider theme={theme}>
+            <AuthContext.Provider
+                value={{
+                    // 仮置き
+                    isLoggedIn: !!token,
+                    token: token,
+                    userId: userId,
+                    login: login,
+                    logout: logout,
+                }}
+            >
+                <Router>
+                    {/* ナビゲーションバーを表示 */}
+                    <MainNavigation />
+                    <main>{routes}</main>
+                    {/* <Auth /> */}
+                </Router>
+            </AuthContext.Provider>
+        </MuiThemeProvider>
     );
 };
 
