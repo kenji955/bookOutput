@@ -1,13 +1,11 @@
 import React, { useCallback, useState, useMemo } from "react";
 
-<<<<<<< HEAD
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-=======
->>>>>>> a42afd35ded0132b5f70499684a4af7f87e4aa10
 import Card from "../../shared/components/UIElements/Card";
 import Book from "./book/book";
+import ListContent from "./ListContent";
 import "./checkList.css";
 
 function RenderCheckList(isLoading: any, items: any, setCheckList: any) {
@@ -31,16 +29,10 @@ function CheckListState(): any {
 }
 
 const checkList = (props: any) => {
-<<<<<<< HEAD
-=======
-    // console.log('items:'+props.items);
-    // console.log('props.items.length:'+props.items.length);
->>>>>>> a42afd35ded0132b5f70499684a4af7f87e4aa10
     const [CheckList, setCheckList] = CheckListState();
     RenderCheckList(props.flug, props.items, setCheckList);
 
     // const renderBook: any = [];
-<<<<<<< HEAD
     let i = 0;
     const renderBook =
         // props.items.map((item: any) => (
@@ -64,26 +56,17 @@ const checkList = (props: any) => {
                     >
                         <p>{item.checkListId.value}</p>
                         <span {...provided.dragHandleProps}>
-                        <FontAwesomeIcon
-                          icon={"grip-vertical"}
-                          style={{ float: "left" }}
-                        />
-                      </span>
-
+                            <FontAwesomeIcon
+                                icon={"grip-vertical"}
+                                style={{ float: "left" }}
+                            />
+                        </span>
+                    {console.log(item.checkListId.id)}
                         {/* ここに例題でいう「Answer」を入れる */}
-                        {/* <Answers questionNum={index} question={question} /> */}
+                        {/* <ListContent itemNum={index} item={item} /> */}
                     </div>
                 )}
             </Draggable>
-=======
-
-    const renderBook =
-        // <div className="book-list">
-        props.items.map((item: any) => (
-            <div className={`checkListItem`}>
-                <p>{item.checkListId.value}</p>
-            </div>
->>>>>>> a42afd35ded0132b5f70499684a4af7f87e4aa10
         ));
     // </div>
 
@@ -91,18 +74,13 @@ const checkList = (props: any) => {
         return (
             <div className="center">
                 <Card>
-<<<<<<< HEAD
                     <h2>アイテムは登録されておりません。</h2>
-=======
-                    <h2>No items found.</h2>
->>>>>>> a42afd35ded0132b5f70499684a4af7f87e4aa10
                 </Card>
             </div>
         );
     }
 
     // return CheckList;
-<<<<<<< HEAD
     // return renderBook;
 
     // ここでエラーだろうなー
@@ -121,13 +99,23 @@ const checkList = (props: any) => {
 
     const reorder = (list: any, startIndex: any, endIndex: any) => {
         const result = Array.from(list);
+        // 配列から動かした項目を削除しremovedに保管
         const [removed] = result.splice(startIndex, 1);
+        // 動かした項目を最終的な位置に挿入
         result.splice(endIndex, 0, removed);
+        //ここでmapを使って、配列resultの頭から表示順を新しく振り直す
+        let num=1;
+        result.map((item:any)=>{
+            item.checkListId.order=num;
+            num++;
+            console.log(item.checkListId.value);
+            console.log(item.checkListId.order);
+        });
 
         return result;
     };
 
-    const onDragEnd = (result: any) => {
+    const onDragEnd = async (result: any) => {
         // はみ出し
         if (!result.destination) {
             return;
@@ -139,24 +127,30 @@ const checkList = (props: any) => {
             result.destination.index
         );
 
-        // props.items = items;
+        // propsのsetStateを利用して更新する。
+        await props.itemSet(items);
+        // ここで更新内容をDBに反映する
+        props.update();
     };
 
     return (
-        <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId="droppable">
-                {(provided, snapshot) => (
-                    <div {...provided.droppableProps} ref={provided.innerRef}>
-                        {renderBook}
-                        {provided.placeholder}
-                    </div>
-                )}
-            </Droppable>
-        </DragDropContext>
+        <div>
+            <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable droppableId="droppable">
+                    {(provided, snapshot) => (
+                        <div
+                            {...provided.droppableProps}
+                            ref={provided.innerRef}
+                            className="checkListAll"
+                        >
+                            {renderBook}
+                            {provided.placeholder}
+                        </div>
+                    )}
+                </Droppable>
+            </DragDropContext>
+        </div>
     );
-=======
-    return renderBook;
->>>>>>> a42afd35ded0132b5f70499684a4af7f87e4aa10
 };
 
 export default checkList;

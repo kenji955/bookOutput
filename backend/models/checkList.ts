@@ -1,16 +1,16 @@
-import mongoose = require('mongoose');
+import mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
 const checkListSchema = new Schema({
-  userId: { type: String, required: true },
-  bookId: { type: String, required: true },
-  checkListId: {
-    id:{ type: String, required: true },
-    value:{ type: String, required: true },
-    checkFrag:{ type: Boolean, required: true }
-  }
+    userId: { type: String, required: true },
+    bookId: { type: String, required: true },
+    checkListId: {
+        id: { type: String, required: true },
+        value: { type: String, required: true },
+        order: { type: String, required: true },
+        checkFrag: { type: Boolean, required: true },
+    },
 });
 
-
-export default mongoose.model('checkList', checkListSchema);
+export default mongoose.model("checkList", checkListSchema);

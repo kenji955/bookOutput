@@ -3,18 +3,18 @@ import { Droppable, Draggable } from "react-beautiful-dnd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const ListContent = (props:any) => {
-  const { question, questionNum } = props;
+  const { item, itemNum } = props;
   return (
-    <Droppable droppableId={`droppable${question.id}`} type={`${questionNum}`}>
+    <Droppable droppableId={`droppable${item.id}`} type={`${itemNum}`}>
       {(provided, snapshot) => (
         <div
           ref={provided.innerRef}
         >
-          {question.answers.map((answer:any, index:any) => {
+          {item.map((item:any, index:any) => {
             return (
               <Draggable
-                key={`${questionNum}${index}`}
-                draggableId={`${questionNum}${index}`}
+                key={`${itemNum}${index}`}
+                draggableId={`${itemNum}${index}`}
                 index={index}
               >
                 {(provided, snapshot) => (
@@ -28,7 +28,7 @@ const ListContent = (props:any) => {
                         style={{ float: "left" }}
                       />
                     </span>
-                    {answer}
+                    {item}
                   </div>
                 )}
               </Draggable>
