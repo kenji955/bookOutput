@@ -33,6 +33,12 @@ const checkList = (props: any) => {
     RenderCheckList(props.flug, props.items, setCheckList);
 
     // const renderBook: any = [];
+    let list = props.items;
+    list.sort(function(a:any,b:any){
+        if(a.checkListId.order<b.checkListId.order) return -1;
+        if(a.checkListId.order > b.checkListId.order) return 1;
+        return 0;
+    });
     let i = 0;
     const renderBook =
         // props.items.map((item: any) => (
@@ -41,7 +47,8 @@ const checkList = (props: any) => {
         //     </div>
         // ));
 
-        props.items.map((item: any, index: any) => (
+        // props.items.map((item: any, index: any) => (
+        list.map((item: any, index: any) => (
             <Draggable
                 key={item.checkListId.id}
                 draggableId={item.checkListId.id}

@@ -3,7 +3,6 @@ import { validationResult } from "express-validator";
 import HttpError from "../models/http-error";
 import Book from "../models/book";
 import CheckList from "../models/checkList";
-import checkList from "../models/checkList";
 
 export const getUserBooks = async (req, res, next) => {
     let books;
@@ -12,7 +11,12 @@ export const getUserBooks = async (req, res, next) => {
     // console.log("userIdのチェック：" + userId);
 
     try {
-        books = await Book.find({ userId: userId })
+        books = await Book.find({ userId: userId }, function (err) {
+            if (err) {
+                res.send(err);
+                console.log(err);
+            }
+        })
             .lean()
             .exec((error, result) => {
                 // console.log("books:" + result);
@@ -72,8 +76,24 @@ export const checkBook = async (req, res, next) => {
     //     return next(error);
     // }
     try {
-        bookInfoResult = await Book.findOne({ bookId: bookId, userId: userId });
-        bookCheck = await CheckList.find({ bookId: bookId, userId: userId });
+        bookInfoResult = await Book.findOne(
+            { bookId: bookId, userId: userId },
+            function (err) {
+                if (err) {
+                    res.send(err);
+                    console.log(err);
+                }
+            }
+        );
+        bookCheck = await CheckList.find(
+            { bookId: bookId, userId: userId },
+            function (err) {
+                if (err) {
+                    res.send(err);
+                    console.log(err);
+                }
+            }
+        );
     } catch (err) {
         const error = new HttpError(
             "本の取得に失敗しました。お手数ですが、後ほどもう一度お試しください。",
@@ -120,7 +140,15 @@ export const register = async (req, res, next) => {
 
     let existingBook;
     try {
-        existingBook = await Book.findOne({ id: bookId, userId: userId });
+        existingBook = await Book.findOne(
+            { id: bookId, userId: userId },
+            function (err) {
+                if (err) {
+                    res.send(err);
+                    console.log(err);
+                }
+            }
+        );
     } catch (err) {
         const error = new HttpError(
             "本の登録に失敗しました。入力内容を確認してください。",
@@ -218,7 +246,7 @@ export const checkRegister = async (req, res, next) => {
 };
 
 // チェックリストドラッグアンドドロップ処理
-export const checkDnD = async (req, res, next) => {
+export const checkDnD = (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return next(
@@ -231,36 +259,89 @@ export const checkDnD = async (req, res, next) => {
         );
     }
     const item = req.body;
-    console.log("item："+item);
-    console.log("item.item："+item.item);
+    console.log("item：" + item);
+    console.log("item.item：" + item.item);
 
     let items = item.item;
     const userId = items[0].userId;
     const bookId = items[0].bookId;
-    console.log("userId:"+userId,"bookId"+bookId);
+    console.log("userId:" + userId, "bookId:" + bookId);
+    console.log;
 
-    const createdCheckList = items.map((item: any) => (
-        new CheckList({
-            userId:item.userId,
-            bookId:item.bookId,
-            checkListId: {
-                id:item.id,
-                value:item.value,
-                order:item.order,
-                checkFrag:item.checkFrag,
-            },
-        })
-    ));
+    const createdCheckList = items.map(
+        (item: any) =>
+            new CheckList({
+                userId: item.userId,
+                bookId: item.bookId,
+                checkListId: {
+                    id: item.checkListId.id,
+                    value: item.checkListId.value,
+                    order: item.checkListId.order,
+                    checkFrag: item.checkListId.checkFrag,
+                },
+            })
+    );
 
     // ユーザー認証機能を追加したらuserIdを追加。
     // モデルとずれているとエラーが発生する
     try {
-        checkList.remove({ userId: userId, bookId: bookId });
+        // CheckList.remove({ userId: userId, bookId: bookId });
         // createdCheckList.save();
-        createdCheckList.map((checkList:any)=>{
-            checkList.save();
-        })
+        // console.log("createdCheckList:"+createdCheckList);
+        // createdCheckList.map((item: any) =>
+        //     console.log("value:" + item.checkListId.value + "  order:" + item.checkListId.order)
+        // );
+        items.map((CLitem: any) => {
+            // CLitem.remove({
+            //     userId:CLitem.userId,
+            //     bookId:CLitem.bookId,
+            //     checkListId: {
+            //         id: CLitem.checkListId.id,
+            //     },
+            // });
+            // CLitem.save();
+
+            let find = CheckList.findOne(
+                {
+                    bookId: bookId,
+                    userId: userId,
+                    "checkListId.id": CLitem.checkListId.id,
+                },
+                function (err, docs) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        console.log("Result : ", docs);
+                    }
+                }
+            );
+
+            // console.log("テスト:" + find);
+            // console.log("userId:" + CLitem.userId);
+            // console.log("bookId:" + CLitem.bookId);
+            // console.log("id:" + CLitem.checkListId.id);
+            // console.log("order:" + CLitem.checkListId.order);
+
+            CheckList.findOneAndUpdate(
+                {
+                    userId: CLitem.userId,
+                    bookId: CLitem.bookId,
+                    "checkListId.id": CLitem.checkListId.id,
+                },
+                { $set: { "checkListId.order": CLitem.checkListId.order } },
+                { new: true },
+                function (err, doc) {
+                    if (err) {
+                        res.send(err);
+                        console.log(err);
+                    }
+                    // res.json({ message: "User update!" });
+                    console.log("doc:" + doc);
+                }
+            );
+        });
     } catch (err) {
+        console.log(err);
         const error = new HttpError(
             "Signing up failed, please try again later.",
             500
@@ -268,7 +349,5 @@ export const checkDnD = async (req, res, next) => {
         return next(error);
     }
 
-    res.status(201).json({
-        
-    });
+    res.status(201).json({});
 };

@@ -1,5 +1,5 @@
 import mongoose = require("mongoose");
-
+mongoose.set('useFindAndModify', false);
 const Schema = mongoose.Schema;
 
 const checkListSchema = new Schema({
