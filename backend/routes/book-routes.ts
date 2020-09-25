@@ -7,6 +7,7 @@ const router = express.Router();
 
 
 router.get("/user/:userId", bookController.getUserBooks);
+router.get("/user/:userId/check", bookController.getUserBooksAndCheck);
 
 router.get("/check/:bookId/:userId", bookController.checkBook);
 // router.get("/info/:bookId/:userId", bookController.infoBook);

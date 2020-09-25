@@ -15,6 +15,7 @@ import Auth from "./user/pages/Auth";
 import Books from "./components/books/books";
 import BookCheck from "./components/books/bookCheck";
 import BookRegister from "./components/books/book/bookRegister";
+import BookSearch from "./components/books/book/bookSearch";
 import MainNavigation from "./shared/components/Navigation/MainNavigation";
 import { AuthContext } from "./shared/context/auth-context";
 import { useAuth } from "./shared/hooks/auth-hook";
@@ -60,7 +61,8 @@ const App: React.FC = () => {
         routes = (
             <Switch>
                 <Route path="/books/register">
-                    <BookRegister />
+                    {/* <BookRegister /> */}
+                    <BookSearch />
                 </Route>
                 <Route path="/books/:bookId">
                     <BookCheck />

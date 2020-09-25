@@ -34,47 +34,53 @@ export const getUserBooks = async (req, res, next) => {
     // res.json({ books: books});
 };
 
+// サイドメニューの本+チェックリスト一覧取得処理
+export const getUserBooksAndCheck = async (req, res, next) => {
+    let books, bookCheck;
+    const userId = req.params.userId;
+    // const { userId } = req.body;
+    // console.log("userIdのチェック：" + userId);
+
+    try {
+        books = await Book.find({ userId: userId }, function (err) {
+            if (err) {
+                res.send(err);
+                console.log(err);
+            }
+        }).lean();
+        // .exec((error, result) => {
+        //     // console.log("books:" + result);
+        //     res.json({ books: result });
+        // });
+        bookCheck = await CheckList.find({ userId: userId }, function (err) {
+            if (err) {
+                res.send(err);
+                console.log(err);
+            }
+        });
+    } catch (err) {
+        const error = new HttpError(
+            "本の取得に失敗しました。お手数ですが、後ほどもう一度お試しください。",
+            500
+        );
+        return next(error);
+    }
+    res.json({
+        books: books,
+        checkList: bookCheck,
+    });
+    // res.json({ books: books.map((book) => book.toObject({ getters: true })) });
+    // console.log("books：" + books.id);
+    // res.json({ books: books});
+};
+
 // チェックリスト取得処理
 export const checkBook = async (req, res, next) => {
     let books;
     const bookId = req.params.bookId;
     const userId = req.params.userId;
-    // console.log("bookIDのチェック：" + req.params.bookId);
-    // console.log("userIdのチェック：" + userId);
 
     let bookInfoResult, bookCheck;
-    // ひとまずの表示ができた処理
-    // try {
-    //     books = await Book.findOne({ bookId: bookId, userId: userId })
-    //         .lean()
-    //         .exec((error, result) => {
-    //             console.log("books:" + result);
-    //             bookInfoResult = result;
-    //             res.json({ books: bookInfoResult });
-    //         });
-    // } catch (err) {
-    //     const error = new HttpError(
-    //         "本の取得に失敗しました。お手数ですが、後ほどもう一度お試しください。",
-    //         500
-    //     );
-    //     return next(error);
-    // }
-
-    // try {
-    //     books = await Book.findOne({ bookId: bookId, userId: userId })
-    //         .lean()
-    //         .exec((error, result) => {
-    //             console.log("books:" + result);
-    //             bookInfoResult = result;
-    //             res.json({ books: bookInfoResult });
-    //         });
-    // } catch (err) {
-    //     const error = new HttpError(
-    //         "本の取得に失敗しました。お手数ですが、後ほどもう一度お試しください。",
-    //         500
-    //     );
-    //     return next(error);
-    // }
     try {
         bookInfoResult = await Book.findOne(
             { bookId: bookId, userId: userId },
@@ -105,12 +111,7 @@ export const checkBook = async (req, res, next) => {
     res.json({
         books: bookInfoResult.toObject({ getters: true }),
         checkList: bookCheck,
-        // checkList: bookCheck.toObject({ getters: true }),
     });
-    // console.log("books：" + bookInfoResult[0].bookId);
-    // res.json({ books: bookInfoResult });
-    // res.json({ books: bookInfoResult.map((book) => book.toObject({ getters: true })) });
-    // res.json({ books: books});
 };
 
 export const register = async (req, res, next) => {

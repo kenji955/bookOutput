@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import "./books.css";
 
 import TimeLine from "../timeLine/timeLine";
+import BookRegister from "./book/bookRegister";
+import BookSearch from './book/bookSearch';
 import { useHttpClient } from "../../shared/hooks/http-hook";
 import { AuthContext } from "../../shared/context/auth-context";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
@@ -104,7 +106,9 @@ const books = (props: any) => {
                     <BookList books={loadedBookinfo} flug={isLoading} key={loadedBookinfo.bookId}/>
                 )}
             </div>
-            <TimeLine />
+            {/* <TimeLine /> */}
+            {/* <BookRegister /> */}
+            {/* <BookSearch /> */}
             <Link to="/books/register" className="register_button">
                 本登録
             </Link>

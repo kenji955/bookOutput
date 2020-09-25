@@ -3,13 +3,15 @@ import React, { useCallback, useState, useMemo } from "react";
 import Card from "../../shared/components/UIElements/Card";
 import Book from "./book/book";
 
+import "./bookList.css";
+
 function RenderBooks(isLoading: any, books: any, setLoadedBook: any) {
     useMemo(() => {
-        const renderBook:any =[];
+        const renderBook: any = [];
         books.map((book: any) => renderBook.push(<Book book={book} />));
-        setLoadedBook (renderBook);
+        setLoadedBook(renderBook);
         // console.log('bookList_RenderBokks:'+books);
-    }, [isLoading,books]);
+    }, [isLoading, books]);
 }
 
 function BookState(): any {
@@ -22,17 +24,14 @@ const bookList = (props: any) => {
     // console.log('props.books.length:'+props.books.length);
     const [loadedBook, setLoadedBook] = BookState();
     RenderBooks(props.flug, props.books, setLoadedBook);
-    
 
     // const renderBook: any = [];
 
-    const renderBook = (
-        // <div className="book-list">
-            props.books.map((book: any) => (
-                <Book key={book.id} book={book} />
-            ))
+    const renderBook = props.books.map((book: any, index:any) => (
+        // <div className="bookListContent">
+            <Book key={"bookList"+index} book={book} />
         // </div>
-    );
+    ));
 
     if (props.books.length === 0) {
         return (
@@ -43,7 +42,6 @@ const bookList = (props: any) => {
             </div>
         );
     }
-    
 
     // return loadedBook;
     return renderBook;

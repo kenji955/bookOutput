@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import "./book.css";
+import "./searchedBook.css";
 
 import Card from "../../../shared/components/UIElements/Card";
 import { useHttpClient } from "../../../shared/hooks/http-hook";
@@ -48,7 +48,7 @@ const searchedBook = (props: any) => {
         // <Link to={{
         //     pathname: `/books/${props.book.id}`
         // }}>
-        <Card className="book">
+        <Card className="searchedBook">
             <form onSubmit={searchBookSubmitHandler}>
                 <img src={props.image} />
                 <h2>{props.name}</h2>

@@ -50,7 +50,7 @@ const checkList = (props: any) => {
         // props.items.map((item: any, index: any) => (
         list.map((item: any, index: any) => (
             <Draggable
-                key={item.checkListId.id}
+                key={item.checkListId.id+index}
                 draggableId={item.checkListId.id}
                 index={index}
             >
@@ -149,6 +149,7 @@ const checkList = (props: any) => {
                             {...provided.droppableProps}
                             ref={provided.innerRef}
                             className="checkListAll"
+                            key="checkListContent"
                         >
                             {renderBook}
                             {provided.placeholder}

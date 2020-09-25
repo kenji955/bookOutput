@@ -1,11 +1,27 @@
-.books {
-    width: 70%;
+.marge {
     display: flex;
-    /* flex-direction: row; */
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    /* justify-content: space-around; */
+    /* height: 100px; */
+    position: absolute;
+    top: 4rem;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.bookList {
+    width: 70%;
     overflow-y: scroll;
     overflow-x: hidden;
-    /* height: 100%; */
+    margin: 0;
+}
+
+.searchBox{
+    width: 100%;
+}
+
+.registeredBooks{
+    width: 30%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    margin: 0;
 }

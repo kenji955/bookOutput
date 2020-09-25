@@ -1,0 +1,20 @@
+.registerBook {
+    width: 85%;
+    max-width: 25rem;
+    margin: 0.5rem 1rem;
+    display: inline-flex;
+}
+
+.thumbnail {
+    width: 5rem;
+    height: 7.25rem;
+    margin-right: 0.5rem;
+}
+
+.bookContent {
+    vertical-align: top;
+}
+
+.bookCheckListContent{
+    /* background-color: lightgray; */
+}

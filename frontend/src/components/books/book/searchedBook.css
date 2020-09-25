@@ -1,10 +1,17 @@
-.book {
+.searchedBook {
     width: 17rem;
     max-width: 25rem;
+    /* height: 50rem; */
     /* margin: auto 1.5% auto 1.5%; */
     margin: 3rem 1rem;
     /* margin-right: 5%; */
     text-align: center;
-    /* display: inline-flex; */
+    display: inline-flex;
 }
 
+/* .description{
+    max-height: 10rem;
+}
+/* .submitB{
+    align-items: flex-end;
+} */

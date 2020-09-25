@@ -2,30 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 
 import "./book.css";
 
-import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 
-import {
-    Badge,
-    CircularProgress,
-    Paper,
-    Button,
-    Fab,
-    Grid,
-} from "@material-ui/core";
-
-// Material-UIアイコン取得
-import MailIcon from "@material-ui/icons/Mail";
-import ShareIcon from "@material-ui/icons/Share";
-import ListAlt from "@material-ui/icons/ListAlt";
-import PersonAdd from "@material-ui/icons/PersonAdd";
-import Lock from "@material-ui/icons/Lock";
-import Chat from "@material-ui/icons/Chat";
-import Assessment from "@material-ui/icons/Assessment";
-import CloudUpload from "@material-ui/icons/CloudUpload";
-import AssignmentTurnedIn from "@material-ui/icons/AssignmentTurnedIn";
-import AddIcon from "@material-ui/icons/Add";
-import EditIcon from "@material-ui/icons/Edit";
-import FavoriteIcon from "@material-ui/icons/Favorite";
 
 import Card from "../../../shared/components/UIElements/Card";
 import Input from "../../../shared/components/FormElements/Input";
@@ -70,26 +47,6 @@ function BookForm() {
     );
 }
 
-// スタイルを適用する
-function Styles() {
-    const styles = makeStyles((theme: Theme) =>
-        createStyles({
-            root: {
-                flexGrow: 1,
-                padding: "10px",
-            },
-            paper: {
-                padding: theme.spacing(2),
-                textAlign: "center",
-                "& > *": {
-                    margin: theme.spacing(3),
-                },
-            },
-        })
-    );
-
-    return styles;
-}
 
 const bookRegister = (props: any) => {
     const { isLoading, error, sendRequest, clearError } = HTTPClient();
@@ -97,61 +54,32 @@ const bookRegister = (props: any) => {
     console.log("userId:" + auth.isLoggedIn);
     // const [loadedBookinfo, setLoadedBookinfo] = LoadState();
 
-    const classes:any = Styles();
 
     const [formState, inputHandler, setFormData] = BookForm();
 
-    const bookSubmitHandler = async (event: any) => {
-        event.preventDefault();
+    // const bookSubmitHandler = async (event: any) => {
+    //     event.preventDefault();
 
-        try {
-            const responseData = await sendRequest(
-                "http://localhost:5000/books/register",
-                "POST",
-                JSON.stringify({
-                    bookId: formState.inputs.id.value,
-                    name: formState.inputs.name.value,
-                    author: formState.inputs.author.value,
-                }),
-                {
-                    "Content-Type": "application/json",
-                }
-            );
-        } catch (err) {}
-    };
-
-    // これをsearchedBookに移動する
-    // const searchBookSubmitHandler = async (
-    //     id: any,
-    //     image: any,
-    //     name: any,
-    //     author: any,
-    //     publishedDate: any,
-    //     description: any
-    // ) => {
     //     try {
     //         const responseData = await sendRequest(
     //             "http://localhost:5000/books/register",
     //             "POST",
     //             JSON.stringify({
-    //                 userId: auth.userId,
-    //                 bookId: id,
-    //                 name: name,
-    //                 author: author,
-    //                 image:image,
-    //                 publishedDate:publishedDate,
-    //                 description:description
+    //                 bookId: formState.inputs.id.value,
+    //                 name: formState.inputs.name.value,
+    //                 author: formState.inputs.author.value,
     //             }),
     //             {
     //                 "Content-Type": "application/json",
     //             }
     //         );
-    //     } catch (err) { }
+    //     } catch (err) {}
     // };
+
 
     return (
         <React.Fragment>
-            <Card className="book">
+            {/* <Card className="book">
                 <form onSubmit={bookSubmitHandler}>
                     <Input
                         element="input"
@@ -184,28 +112,8 @@ const bookRegister = (props: any) => {
                         登録
                     </ButtonE>
                 </form>
-            </Card>
+            </Card> */}
             <BookSearch auth={auth} />
-
-            <Grid container className={classes.root} spacing={3}>
-                <Grid item xs={12} justify="center">
-                    <Paper
-                        variant="outlined"
-                        elevation={3}
-                        className={classes.paper}
-                    >
-                        <Fab color="primary" aria-label="add">
-                            <AddIcon />
-                        </Fab>
-                        <Fab color="secondary" aria-label="edit">
-                            <EditIcon />
-                        </Fab>
-                        <Fab disabled aria-label="like">
-                            <FavoriteIcon />
-                        </Fab>
-                    </Paper>
-                </Grid>
-            </Grid>
         </React.Fragment>
     );
 };
